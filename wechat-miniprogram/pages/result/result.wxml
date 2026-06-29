@@ -1,0 +1,61 @@
+<view class="page">
+  <view class="header">
+    <view class="header-left" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <text class="header-title">历史记录</text>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="content">
+    <view class="search-bar">
+      <input 
+        class="search-input" 
+        placeholder="搜索问题或回答"
+        value="{{keyword}}"
+        bindinput="onKeywordInput"
+      />
+      <view class="search-btn" bindtap="searchHistory">
+        <text>搜索</text>
+      </view>
+    </view>
+
+    <view class="history-list" wx:if="{{historyList.length > 0}}">
+      <view 
+        class="history-item" 
+        wx:for="{{historyList}}" 
+        wx:key="msg_id"
+      >
+        <view class="item-header">
+          <view class="input-type">
+            <text class="type-icon">
+              {{item.input_type === 'image' ? '📷' : item.input_type === 'voice' ? '🎤' : '✏️'}}
+            </text>
+            <text>{{item.input_type === 'image' ? '图片' : item.input_type === 'voice' ? '语音' : '文本'}}</text>
+          </view>
+          <text class="item-time">{{formatTime(item.created_at)}}</text>
+        </view>
+        <view class="item-content">
+          <view class="question">
+            <text class="label">问题：</text>
+            <text class="text">{{item.content_text}}</text>
+          </view>
+          <view class="answer">
+            <text class="label">回答：</text>
+            <text class="text">{{item.answer_text}}</text>
+          </view>
+        </view>
+        <view class="item-footer" wx:if="{{item.intercepted}}">
+          <view class="risk-badge">
+            <text>⚠️ 仅供参考</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{historyList.length === 0}}">
+      <text class="empty-icon">📭</text>
+      <text class="empty-text">暂无历史记录</text>
+    </view>
+  </view>
+</view>

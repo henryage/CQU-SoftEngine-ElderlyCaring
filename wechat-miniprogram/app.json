@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/register/register",
+    "pages/result/result"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTitleText": "模糊视觉辅助问答系统",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "permission": {
+    "scope.camera": {
+      "desc": "需要访问摄像头进行拍照识别"
+    },
+    "scope.writePhotosAlbum": {
+      "desc": "需要访问相册选择图片"
+    },
+    "scope.record": {
+      "desc": "需要访问麦克风进行语音输入"
+    }
+  },
+  "sitemapLocation": "sitemap.json"
+}

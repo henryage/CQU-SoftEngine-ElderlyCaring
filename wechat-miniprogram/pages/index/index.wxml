@@ -1,0 +1,167 @@
+<view class="page">
+  <!-- 摄像头背景 -->
+  <camera 
+    class="camera-bg {{showTextModal || showEmergencyModal || showChildModal ? 'camera-disabled' : ''}}" 
+    device-position="{{cameraPosition}}" 
+    flash="{{flash}}"
+    binderror="onCameraError"
+  ></camera>
+
+  <view class="app-container">
+    <!-- 顶部状态栏 -->
+    <view class="top-bar">
+      <view class="status-indicator">
+        <view class="status-dot {{isConnected ? 'online' : 'offline'}}"></view>
+        <text class="status-text">{{isConnected ? '在线' : '离线'}}</text>
+      </view>
+    </view>
+
+    <!-- 中央顶部控制按钮 -->
+    <view class="center-top-controls">
+      <view class="control-btn-large" bindtap="switchCamera">
+        <text>🔄</text>
+      </view>
+      <view class="control-btn-large" bindtap="toggleFlash">
+        <text>{{flash === 'on' ? '💡' : '🌙'}}</text>
+      </view>
+    </view>
+
+    <!-- 主交互区域 -->
+    <view class="main-area">
+      <!-- AI状态指示 -->
+      <view class="ai-indicator">
+        <view class="ai-avatar">
+          <text>🤖</text>
+        </view>
+        <view class="ai-status">
+          <view class="typing-indicator" wx:if="{{isThinking}}">
+            <view class="typing-dot"></view>
+            <view class="typing-dot"></view>
+            <view class="typing-dot"></view>
+          </view>
+          <text class="ai-status-text">{{isThinking ? '思考中...' : '正在观察'}}</text>
+        </view>
+      </view>
+
+      <!-- 消息气泡区域 -->
+      <view class="message-container">
+        <view 
+          class="message-item {{item.type}}" 
+          wx:for="{{messages}}" 
+          wx:key="id"
+        >
+          <view class="message-bubble {{item.type === 'user' ? 'user-bubble' : 'ai-bubble'}}">
+            <text class="message-text">{{item.content}}</text>
+            <text class="message-time">{{item.time}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作区域 -->
+    <view class="bottom-panel">
+      <!-- 一键操作区 -->
+      <view class="action-row">
+        <view class="action-btn primary-btn" bindtap="handlePhotoAsk">
+          <text class="action-icon">📷</text>
+          <text class="action-text">拍照识别</text>
+        </view>
+        
+        <view class="action-btn secondary-btn" bindtap="handleTextAsk">
+          <text class="action-icon">💬</text>
+          <text class="action-text">打字提问</text>
+        </view>
+      </view>
+
+      <!-- 功能按钮区 -->
+      <view class="function-row">
+        <view class="function-btn" bindtap="handleHistory">
+          <text class="func-icon">📜</text>
+          <text class="func-text">历史记录</text>
+        </view>
+        
+        <view class="function-btn child-btn" bindtap="handleChildMessage">
+          <text class="func-icon">📱</text>
+          <text class="func-text">联系子女</text>
+        </view>
+        
+        <view class="function-btn emergency-btn" bindtap="handleEmergency">
+          <text class="func-icon">🆘</text>
+          <text class="func-text">紧急呼叫</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 打字提问模态框 -->
+  <view class="modal-overlay" wx:if="{{showTextModal}}" bindtap="closeTextModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text>输入问题</text>
+        <view class="modal-close" bindtap="closeTextModal">✕</view>
+      </view>
+      <textarea 
+        class="modal-textarea" 
+        placeholder="请输入您的问题..."
+        value="{{inputText}}"
+        bindinput="onInputText"
+        maxlength="500"
+        focus="{{showTextModal}}"
+        auto-height
+      ></textarea>
+      <view class="modal-footer">
+        <view class="modal-btn cancel" bindtap="closeTextModal">取消</view>
+        <view class="modal-btn confirm" bindtap="submitTextAsk">发送</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 紧急呼叫模态框 -->
+  <view class="modal-overlay" wx:if="{{showEmergencyModal}}" bindtap="closeEmergencyModal">
+    <view class="modal-content emergency-modal" catchtap="">
+      <view class="emergency-icon-large">🚨</view>
+      <text class="emergency-title">已通知家人</text>
+      <text class="emergency-desc">请等待家人回复，紧急情况请拨打120</text>
+      <view class="emergency-actions">
+        <view class="emergency-call-btn" bindtap="call120">
+          <text>拨打120</text>
+        </view>
+        <view class="emergency-cancel-btn" bindtap="closeEmergencyModal">
+          <text>取消</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系子女模态框 -->
+  <view class="modal-overlay" wx:if="{{showChildModal}}" bindtap="closeChildModal">
+    <view class="modal-content child-modal" catchtap="">
+      <view class="modal-header">
+        <text>联系子女</text>
+        <view class="modal-close" bindtap="closeChildModal">✕</view>
+      </view>
+      <view class="child-message-area">
+        <textarea 
+          class="modal-textarea child-textarea" 
+          placeholder="输入想对子女说的话..."
+          value="{{childMessage}}"
+          bindinput="onChildMessageInput"
+          maxlength="200"
+          focus="{{showChildModal}}"
+        ></textarea>
+      </view>
+      <view class="modal-footer">
+        <view class="modal-btn cancel" bindtap="closeChildModal">取消</view>
+        <view class="modal-btn confirm child-confirm" bindtap="sendChildMessage">发送</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提示消息 -->
+  <view class="toast-notification" wx:if="{{toastMessage}}" bindtap="hideToast">
+    <view class="toast-content">
+      <text class="toast-icon">💡</text>
+      <text class="toast-text">{{toastMessage}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,162 @@
+.page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.header {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  padding: 60rpx 30rpx 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left {
+  width: 80rpx;
+}
+
+.back-icon {
+  font-size: 48rpx;
+  color: #ffffff;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.header-right {
+  width: 80rpx;
+}
+
+.content {
+  padding: 30rpx;
+}
+
+.search-bar {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.search-input {
+  flex: 1;
+  height: 88rpx;
+  padding: 0 30rpx;
+  background: #ffffff;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+}
+
+.search-btn {
+  height: 88rpx;
+  padding: 0 40rpx;
+  background: #4CAF50;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-btn text {
+  color: #ffffff;
+  font-size: 30rpx;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.history-item {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 24rpx 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.input-type {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.type-icon {
+  font-size: 28rpx;
+}
+
+.input-type text:last-child {
+  font-size: 26rpx;
+  color: #4CAF50;
+}
+
+.item-time {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.question, .answer {
+  display: flex;
+  gap: 8rpx;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #999999;
+  flex-shrink: 0;
+}
+
+.text {
+  font-size: 30rpx;
+  color: #333333;
+  line-height: 1.6;
+}
+
+.item-footer {
+  margin-top: 20rpx;
+}
+
+.risk-badge {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  background: #FFF3E0;
+  border-radius: 20rpx;
+}
+
+.risk-badge text {
+  font-size: 24rpx;
+  color: #FF9800;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #999999;
+}
