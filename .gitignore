@@ -1,0 +1,36 @@
+# 虚拟环境
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# 敏感配置（.env 含真实API Key，不提交）
+backend/.env
+*.pem
+*.key
+
+# 数据文件
+backend/data/uploads/*
+backend/data/chroma/*
+!backend/data/uploads/.gitkeep
+!backend/data/chroma/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 工作文件和临时脚本
+.workbuddy/
+overview.md
+backend/data/ssh_*.py
+backend/tests/
