@@ -1,0 +1,33 @@
+<view class="page-container">
+  <view class="dark-overlay"></view>
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <view class="nav-title">喵喵助手</view>
+    </view>
+  </view>
+
+  <view class="center-area">
+    <image class="cat-logo" src="/images/cat/speak.png" mode="aspectFit"></image>
+    <view class="app-name">喵喵助手</view>
+    
+    <view wx:if="{{!isLoggingIn}}" class="login-btn" bindtap="onLogin">
+      <text>微信一键登录</text>
+    </view>
+    
+    <view wx:if="{{isLoggingIn}}" class="logging-status">
+      <view class="loading-dots">
+        <view class="dot"></view>
+        <view class="dot"></view>
+        <view class="dot"></view>
+      </view>
+      <view class="logging-text">正在登录...</view>
+    </view>
+
+    <view wx:if="{{loginError}}" class="error-area">
+      <view class="error-text">{{loginError}}</view>
+      <view class="retry-btn" bindtap="onLogin">
+        <text>重新登录</text>
+      </view>
+    </view>
+  </view>
+</view>
