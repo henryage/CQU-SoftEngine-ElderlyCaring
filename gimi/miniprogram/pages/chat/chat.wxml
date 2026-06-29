@@ -1,0 +1,72 @@
+<view class="page-container">
+  <camera wx:if="{{cameraAuthorized}}" class="camera-bg" device-position="back" flash="off"></camera>
+  <view class="dark-overlay"></view>
+
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <view class="nav-back" bindtap="onGoBack">‹ 返回</view>
+      <view class="nav-title">聊天</view>
+      <view class="nav-placeholder"></view>
+    </view>
+  </view>
+
+  <scroll-view
+    class="chat-list" scroll-y
+    scroll-into-view="{{scrollToId}}" scroll-with-animation
+    enhanced show-scrollbar="{{false}}"
+  >
+    <view class="chat-list-inner" style="padding-top: {{navBarHeight}}px; padding-bottom: {{bottomBarHeight}}px;">
+      <view wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}">
+        <chat-bubble
+          role="{{item.role}}" type="{{item.type}}"
+          content="{{item.content}}" status="{{item.status}}"
+          cat-state="{{item.catState}}"
+          risk-tags="{{item.riskTags}}" intercepted="{{item.intercepted}}"
+          message-id="{{item.id}}"
+          bind:bubbletap="onBubbleTap"
+          bind:retry="onRetryMessage"
+        ></chat-bubble>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{recordState !== 'idle'}}" class="status-area">
+    <view wx:if="{{waveActive}}" class="wave-animation">
+      <view class="wave-bar wave-bar-1"></view>
+      <view class="wave-bar wave-bar-2"></view>
+      <view class="wave-bar wave-bar-3"></view>
+    </view>
+    <view class="status-text">{{statusText}}</view>
+  </view>
+
+  <view class="bottom-bar" style="padding-bottom: {{safeAreaBottom}}px;">
+    <view class="buttons-container">
+      <view
+        class="control-btn mic-btn {{recordState === 'recording' ? 'mic-active' : ''}}"
+        bindtouchstart="onMicStart"
+        bindtouchend="onMicEnd"
+        bindtouchcancel="onMicEnd"
+      >
+        <text class="btn-icon">🎤</text>
+      </view>
+
+      <view class="control-btn cancel-btn" bindtap="onCancelTap">
+        <text class="btn-icon">✕</text>
+      </view>
+
+      <view
+        class="control-btn camera-btn {{recordState !== 'idle' ? 'btn-disabled' : ''}}"
+        bindtap="onCameraTap"
+      >
+        <text class="btn-icon">📷</text>
+      </view>
+
+      <view
+        class="control-btn emergency-btn {{recordState !== 'idle' ? 'btn-disabled' : ''}}"
+        bindtap="onEmergencyTap"
+      >
+        <text class="btn-icon">🆘</text>
+      </view>
+    </view>
+  </view>
+</view>

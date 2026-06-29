@@ -1,0 +1,32 @@
+<view class="chat-bubble {{role === 'user' ? 'bubble-user' : 'bubble-assistant'}}">
+  <view wx:if="{{role !== 'user'}}" class="cat-avatar">
+    <image class="cat-image" src="{{catImageUrl}}" mode="aspectFill"></image>
+  </view>
+
+  <view class="bubble-content" bindtap="onBubbleTap">
+    <view wx:if="{{type === 'reminder'}}" class="reminder-icon">💊</view>
+
+    <view wx:if="{{imageUrls.length > 0}}" class="bubble-images">
+      <image
+        wx:for="{{imageUrls}}" wx:key="index"
+        class="bubble-image" src="{{item}}" mode="aspectFill"
+        data-url="{{item}}" bindtap="previewImage"
+      ></image>
+    </view>
+
+    <view wx:if="{{content.text}}" class="bubble-text">{{content.text}}</view>
+
+    <view wx:if="{{status === 'sending'}}" class="status-loading">
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+    </view>
+
+    <view wx:if="{{intercepted || riskTags.length > 0}}" class="risk-warning">
+      ⚠️ 以上内容仅供参考，请遵医嘱
+    </view>
+  </view>
+
+  <view wx:if="{{role === 'user' && status === 'error'}}" class="error-retry" bindtap="onErrorTap">!</view>
+  <view wx:if="{{role === 'user'}}" class="bubble-spacer"></view>
+</view>

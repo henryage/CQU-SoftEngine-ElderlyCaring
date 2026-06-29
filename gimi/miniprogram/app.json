@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/home/home",
+    "pages/chat/chat",
+    "pages/reminder/reminder",
+    "pages/emergency/emergency",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "backgroundColor": "#000000",
+    "backgroundTextStyle": "light",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "white"
+  },
+  "permission": {
+    "scope.camera": {
+      "desc": "用于拍摄画面进行视觉问答"
+    },
+    "scope.record": {
+      "desc": "用于语音输入进行对话"
+    }
+  },
+  "plugins": {
+    "WechatSI": {
+      "version": "0.3.6",
+      "provider": "wx069ba97219f66d99"
+    }
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}
