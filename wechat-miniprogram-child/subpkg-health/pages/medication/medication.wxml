@@ -1,0 +1,26 @@
+<view class="container with-bottom-nav">
+  <view class="page-header">
+    <view class="page-header-title">用药提醒</view>
+    <view class="page-header-sub">查看老人的用药计划</view>
+  </view>
+
+  <view class="card text-center">
+    <view class="text-sm text-gray mb-20">后端 child 路由开发中，功能即将上线</view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="bottom-nav-item" bindtap="goBack">
+      <view class="bottom-nav-icon">&#9750;</view>
+      <view>首页</view>
+    </view>
+    <view class="bottom-nav-item active">
+      <view class="bottom-nav-icon">&#9829;</view>
+      <view>用药</view>
+    </view>
+    <view class="bottom-nav-item" bindtap="goToTrace">
+      <view class="bottom-nav-icon">&#8982;</view>
+      <view>轨迹</view>
+    </view>
+  </view>
+</view>

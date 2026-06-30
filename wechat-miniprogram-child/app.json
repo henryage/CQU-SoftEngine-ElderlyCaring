@@ -1,18 +1,46 @@
 {
+  "lazyCodeLoading": "requiredComponents",
   "pages": [
+    "pages/login/login",
     "pages/index/index",
     "pages/alert/alert",
-    "pages/profile/profile",
-    "pages/bind/bind",
-    "pages/trace/trace",
-    "pages/health/health",
-    "pages/medication/medication",
-    "pages/message/message",
-    "pages/greeting/greeting",
-    "pages/history/history",
-    "pages/settings/settings",
-    "pages/knowledge/knowledge"
+    "pages/profile/profile"
   ],
+  "subPackages": [
+    {
+      "root": "subpkg-health",
+      "name": "health",
+      "pages": [
+        "pages/health/health",
+        "pages/medication/medication",
+        "pages/trace/trace"
+      ]
+    },
+    {
+      "root": "subpkg-care",
+      "name": "care",
+      "pages": [
+        "pages/message/message",
+        "pages/greeting/greeting",
+        "pages/history/history"
+      ]
+    },
+    {
+      "root": "subpkg-manage",
+      "name": "manage",
+      "pages": [
+        "pages/bind/bind",
+        "pages/settings/settings",
+        "pages/knowledge/knowledge"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["health"]
+    }
+  },
   "tabBar": {
     "color": "#999999",
     "selectedColor": "#4A90D9",
@@ -21,15 +49,21 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "首页"
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
       },
       {
         "pagePath": "pages/alert/alert",
-        "text": "预警"
+        "text": "预警",
+        "iconPath": "images/tab-alert.png",
+        "selectedIconPath": "images/tab-alert-active.png"
       },
       {
         "pagePath": "pages/profile/profile",
-        "text": "我的"
+        "text": "我的",
+        "iconPath": "images/tab-profile.png",
+        "selectedIconPath": "images/tab-profile-active.png"
       }
     ]
   },

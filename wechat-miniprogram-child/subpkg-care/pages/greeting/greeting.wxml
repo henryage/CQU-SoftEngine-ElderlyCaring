@@ -1,0 +1,26 @@
+<view class="container with-bottom-nav">
+  <view class="page-header">
+    <view class="page-header-title">定时问候</view>
+    <view class="page-header-sub">给老人设置定期问候</view>
+  </view>
+
+  <view class="card text-center">
+    <view class="text-sm text-gray mb-20">后端 child 路由开发中，功能即将上线</view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="bottom-nav-item" bindtap="goBack">
+      <view class="bottom-nav-icon">&#9750;</view>
+      <view>首页</view>
+    </view>
+    <view class="bottom-nav-item" bindtap="goToMessage">
+      <view class="bottom-nav-icon">&#9993;</view>
+      <view>通信</view>
+    </view>
+    <view class="bottom-nav-item active">
+      <view class="bottom-nav-icon">&#9728;</view>
+      <view>问候</view>
+    </view>
+  </view>
+</view>
