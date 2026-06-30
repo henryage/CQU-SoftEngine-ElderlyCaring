@@ -6,12 +6,18 @@ var reminderTimer = null;
 
 Page({
   data: {
-    statusBarHeight: 20
+    statusBarHeight: 20,
+    userId: ''
   },
 
   onLoad: function() {
     var sys = wx.getSystemInfoSync();
-    this.setData({ statusBarHeight: sys.statusBarHeight || 20 });
+    var app = getApp();
+    var refId = app.globalData.refId;
+    this.setData({
+      statusBarHeight: sys.statusBarHeight || 20,
+      userId: refId ? '老人id' + refId : ''
+    });
   },
 
   onShow: function() {

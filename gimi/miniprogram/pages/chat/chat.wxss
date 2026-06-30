@@ -20,9 +20,10 @@
   padding: 0 32rpx;
 }
 .nav-back { font-size: 34rpx; color: #fff; }
+.nav-center { display: flex; flex-direction: column; align-items: center; }
 .nav-title { font-size: 36rpx; color: #fff; font-weight: bold; }
+.nav-user-id { font-size: 24rpx; color: rgba(255,255,255,0.7); }
 .nav-placeholder { width: 100rpx; }
-.nav-user-id { font-size: 28rpx; color: rgba(255,255,255,0.75); }
 
 .chat-list {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
