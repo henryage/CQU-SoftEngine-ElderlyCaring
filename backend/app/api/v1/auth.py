@@ -141,6 +141,22 @@ async def wx_login(payload: WxLoginIn, db: DB):
     ).model_dump())
 
 
+@router.get(
+    "/me",
+    response_model=R,
+    summary="当前用户信息",
+    description="返回当前登录用户的 ref_id、昵称、角色。老人可在此看到自己的 user_id 告知子女。",
+)
+async def my_info(cur: AnyRole):
+    return R.ok({
+        "ref_id": cur.ref_id,
+        "user_type": cur.user_type,
+        "is_child": cur.is_child,
+        "is_elder": cur.is_elder,
+        "is_admin": cur.is_admin,
+    })
+
+
 @router.post(
     "/bind-phone",
     response_model=R,
