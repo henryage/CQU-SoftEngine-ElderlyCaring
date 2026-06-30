@@ -1,0 +1,62 @@
+<view class="container">
+  <!-- 绑定状态头部 -->
+  <view class="page-header">
+    <view class="page-header-title">孝心守护</view>
+    <view wx:if="{{isBound}}" class="page-header-sub">
+      {{boundElderlyName || '老人'}} · 已绑定守护中
+    </view>
+    <view wx:else class="page-header-sub" bindtap="goToBind">
+      尚未绑定老人 · 点击绑定
+    </view>
+  </view>
+
+  <!-- 尚未绑定提示 -->
+  <view wx:if="{{!isBound}}" class="card text-center">
+    <view class="text-lg mb-20">绑定老人账号</view>
+    <view class="text-sm text-gray mb-20">绑定后可查看老人健康状态、行为轨迹、预警通知等信息</view>
+    <view class="btn-primary" bindtap="goToBind">前往绑定</view>
+  </view>
+
+  <!-- 功能卡片网格 -->
+  <view class="card">
+    <view class="text-lg text-bold mb-20">功能服务</view>
+    <view class="func-grid">
+      <view class="func-item" bindtap="goToHealth">
+        <view class="func-icon" style="background-color:#E6F7FF;">💊</view>
+        <view class="func-label">健康画像</view>
+      </view>
+      <view class="func-item" bindtap="goToMedication">
+        <view class="func-icon" style="background-color:#FFF7E6;">💊</view>
+        <view class="func-label">用药提醒</view>
+      </view>
+      <view class="func-item" bindtap="goToTrace">
+        <view class="func-icon" style="background-color:#F6FFED;">📋</view>
+        <view class="func-label">行为轨迹</view>
+      </view>
+      <view class="func-item" bindtap="goToHistory">
+        <view class="func-icon" style="background-color:#FFF1F0;">📝</view>
+        <view class="func-label">问答历史</view>
+      </view>
+      <view class="func-item" bindtap="goToMessage">
+        <view class="func-icon" style="background-color:#F0F5FF;">💬</view>
+        <view class="func-label">亲情通信</view>
+      </view>
+      <view class="func-item" bindtap="goToGreeting">
+        <view class="func-icon" style="background-color:#FFF0F6;">⏰</view>
+        <view class="func-label">定时问候</view>
+      </view>
+      <view class="func-item" bindtap="goToSettings">
+        <view class="func-icon" style="background-color:#F9F0FF;">⚙️</view>
+        <view class="func-label">远程设置</view>
+      </view>
+      <view class="func-item" bindtap="goToKnowledge">
+        <view class="func-icon" style="background-color:#E6FFFB;">📚</view>
+        <view class="func-label">知识库</view>
+      </view>
+      <view class="func-item" bindtap="goToBind">
+        <view class="func-icon" style="background-color:#FFFBE6;">🔗</view>
+        <view class="func-label">绑定管理</view>
+      </view>
+    </view>
+  </view>
+</view>

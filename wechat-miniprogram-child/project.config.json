@@ -1,5 +1,5 @@
 {
-  "description": "摄像头识别小程序项目配置",
+  "description": "孝心守护-子女端小程序项目配置",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -48,8 +48,8 @@
   },
   "compileType": "miniprogram",
   "libVersion": "3.16.1",
-  "appid": "wxf47f0821b759532c",
-  "projectname": "camera-recognition",
+  "appid": "wxa381d07ee00aa681",
+  "projectname": "child-monitor",
   "isGameTourist": false,
   "condition": {
     "search": {

@@ -1,5 +1,5 @@
 const app = getApp()
-const { api } = require('../../utils/api')
+const { api, BASE_URL } = require('../../utils/api')
 
 Page({
   data: {
@@ -100,8 +100,13 @@ Page({
   },
 
   initWebSocket() {
+    const host = (BASE_URL || '').replace('http://', '').replace('https://', '')
+    if (!host) {
+      console.warn('WebSocket: BASE_URL 为空，跳过连接')
+      return
+    }
     this.socketTask = wx.connectSocket({
-      url: 'wss://' + app.globalData.apiHost.replace('http://', '').replace('https://', '') + '/ws/stream',
+      url: 'ws://' + host + '/ws/stream',
       header: {
         'Authorization': 'Bearer ' + app.getToken()
       },
@@ -588,6 +593,12 @@ Page({
   handleHistory() {
     wx.navigateTo({
       url: '/pages/result/result'
+    })
+  },
+
+  handleProfile() {
+    wx.navigateTo({
+      url: '/pages/profile/profile'
     })
   },
 

@@ -1,8 +1,8 @@
 {
-  "libVersion": "3.16.1",
-  "projectname": "wechat-miniprogram",
-  "condition": {},
+  "description": "此文件包含不希望与他人分享的隐私配置",
+  "projectname": "wechat-miniprogram-child",
   "setting": {
+    "compileHotReLoad": true,
     "urlCheck": false,
     "coverView": true,
     "lazyloadPlaceholderEnable": false,
@@ -14,10 +14,11 @@
     "useStaticServer": false,
     "useLanDebug": false,
     "showES6CompileOption": false,
-    "compileHotReLoad": true,
     "checkInvalidKey": true,
     "ignoreDevUnusedFiles": true,
     "bigPackageSizeSupport": false,
     "useIsolateContext": true
-  }
+  },
+  "libVersion": "3.16.1",
+  "condition": {}
 }

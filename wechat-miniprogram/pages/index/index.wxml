@@ -85,6 +85,11 @@
           <text class="func-text">联系子女</text>
         </view>
         
+        <view class="function-btn" bindtap="handleProfile">
+          <text class="func-icon">👤</text>
+          <text class="func-text">个人中心</text>
+        </view>
+        
         <view class="function-btn emergency-btn" bindtap="handleEmergency">
           <text class="func-icon">🆘</text>
           <text class="func-text">紧急呼叫</text>

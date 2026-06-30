@@ -4,6 +4,16 @@ App({
   onLaunch() {
     this.initGlobalData()
     this.checkRegistration()
+    this.checkLoginStatus()
+  },
+
+  checkLoginStatus() {
+    const token = this.getToken()
+    if (token) {
+      wx.redirectTo({
+        url: '/pages/index/index'
+      })
+    }
   },
 
   onShow() {
@@ -75,6 +85,42 @@ App({
     }
   },
 
+  async skipLogin() {
+    try {
+      wx.showLoading({ title: '登录中...' })
+      
+      const loginRes = await new Promise((resolve, reject) => {
+        wx.login({
+          success: resolve,
+          fail: reject
+        })
+      })
+
+      const data = await api.login(loginRes.code, 'user')
+
+      this.globalData.token = data.token
+      this.globalData.refreshToken = data.refresh_token
+      this.globalData.userId = data.ref_id
+      this.globalData.nickname = data.nickname
+      this.globalData.userType = data.user_type
+      this.globalData.isRegistered = true
+
+      wx.setStorageSync('token', data.token)
+      wx.setStorageSync('refresh_token', data.refresh_token)
+      wx.setStorageSync('user_id', data.ref_id)
+      wx.setStorageSync('nickname', data.nickname)
+      wx.setStorageSync('is_registered', 'true')
+
+      wx.hideLoading()
+      return data
+
+    } catch (err) {
+      wx.hideLoading()
+      console.error('跳过登录失败:', err)
+      throw err
+    }
+  },
+
   setRegistered() {
     this.globalData.isRegistered = true
     wx.setStorageSync('is_registered', 'true')
@@ -117,10 +163,11 @@ App({
     }
 
     const sendHeartbeat = async () => {
+      if (!this.getToken()) return
       try {
         await api.heartbeat()
       } catch (err) {
-        console.error('心跳失败:', err)
+        // 心跳失败静默处理，不影响用户体验
       }
     }
 

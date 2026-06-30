@@ -1,0 +1,14 @@
+<view class="container">
+  <view class="card">
+    <view class="text-lg text-bold mb-20">绑定老人账号</view>
+    <view class="text-sm text-gray mb-20">输入老人端提供的绑定码，完成账号关联</view>
+    <input class="bind-input" type="text" placeholder="请输入绑定码" maxlength="20" />
+    <view class="btn-primary mt-20">确认绑定</view>
+  </view>
+  <view class="card">
+    <view class="text-lg text-bold mb-20">已绑定老人</view>
+    <view class="empty-state" style="padding:40rpx;">
+      <view class="text-sm text-gray">暂无绑定记录</view>
+    </view>
+  </view>
+</view>

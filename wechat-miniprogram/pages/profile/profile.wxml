@@ -1,0 +1,53 @@
+<view class="page">
+  <view class="header">
+    <view class="header-content">
+      <view class="avatar">
+        <text>👴</text>
+      </view>
+      <view class="user-info">
+        <text class="nickname">{{nickname}}</text>
+        <text class="user-id">用户ID: {{userId}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="content">
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">Token信息</text>
+      </view>
+
+      <view class="token-card">
+        <view class="token-header">
+          <view class="token-label-row">
+            <text class="token-label">当前Token</text>
+            <view class="token-type-badge real">
+              <text>{{tokenType}}</text>
+            </view>
+          </view>
+          <view class="token-actions">
+            <view class="token-action-btn" bindtap="toggleTokenVisibility">
+              <text>{{tokenVisible ? '收起' : '查看'}}</text>
+            </view>
+            <view class="token-action-btn" bindtap="copyToken">
+              <text>复制</text>
+            </view>
+          </view>
+        </view>
+        <view class="token-value">
+          <text>{{tokenVisible ? token : '点击"查看"按钮显示Token'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="menu-list">
+        <view class="menu-item" bindtap="handleLogout">
+          <text class="menu-icon">🚪</text>
+          <text class="menu-text">退出登录</text>
+          <text class="menu-arrow">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

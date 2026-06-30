@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="page-header">
+    <view class="page-header-title">用药提醒</view>
+    <view class="page-header-sub">对应数据库: medication_reminder</view>
+  </view>
+
+  <!-- 新建提醒按钮 -->
+  <view class="card">
+    <view class="flex-center">
+      <view class="btn-primary" style="width:100%;">+ 新建用药提醒</view>
+    </view>
+  </view>
+
+  <!-- 提醒列表 -->
+  <view class="card">
+    <view class="text-lg text-bold mb-20">提醒列表</view>
+    <view class="empty-state" style="padding:40rpx;">
+      <view class="text-sm text-gray">暂无用药提醒</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,47 @@
+<view class="container">
+  <view class="page-header">
+    <view class="page-header-title">远程设置</view>
+    <view class="page-header-sub">对应数据库: user_setting + setting_change · 远程配置老人端参数</view>
+  </view>
+
+  <!-- 配置项列表 -->
+  <view class="card">
+    <view class="text-lg text-bold mb-20">适老化配置</view>
+    <view class="list-item" bindtap="noop">
+      <view class="list-item-left">
+        <view class="list-item-icon" style="background-color:#E6F7FF;">🔊</view>
+        <view class="text-md">语音语速</view>
+      </view>
+      <view class="list-item-arrow">></view>
+    </view>
+    <view class="list-item" bindtap="noop">
+      <view class="list-item-left">
+        <view class="list-item-icon" style="background-color:#F6FFED;">🔤</view>
+        <view class="text-md">字体大小</view>
+      </view>
+      <view class="list-item-arrow">></view>
+    </view>
+    <view class="list-item" bindtap="noop">
+      <view class="list-item-left">
+        <view class="list-item-icon" style="background-color:#FFF7E6;">🎨</view>
+        <view class="text-md">界面颜色</view>
+      </view>
+      <view class="list-item-arrow">></view>
+    </view>
+    <view class="list-item" bindtap="noop">
+      <view class="list-item-left">
+        <view class="list-item-icon" style="background-color:#FFF0F6;">🔔</view>
+        <view class="text-md">通知策略</view>
+      </view>
+      <view class="list-item-arrow">></view>
+    </view>
+  </view>
+
+  <!-- 变更记录 -->
+  <view class="card">
+    <view class="text-lg text-bold mb-20">配置变更记录</view>
+    <view class="empty-state" style="padding:40rpx;">
+      <view class="text-sm text-gray">暂无变更记录</view>
+    </view>
+  </view>
+</view>

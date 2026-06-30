@@ -1,0 +1,13 @@
+<view class="container">
+  <view class="page-header">
+    <view class="page-header-title">问答历史</view>
+    <view class="page-header-sub">对应数据库: message · 查看老人咨询记录与AI回复</view>
+  </view>
+
+  <view class="card">
+    <view class="text-lg text-bold mb-20">咨询记录</view>
+    <view class="empty-state" style="padding:40rpx;">
+      <view class="text-sm text-gray">暂无问答记录</view>
+    </view>
+  </view>
+</view>
