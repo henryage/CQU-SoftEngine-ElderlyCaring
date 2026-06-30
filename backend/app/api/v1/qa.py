@@ -160,7 +160,7 @@ async def ask(
 
         answer = await llm_client.call_llm(
             prompt=user_text,
-            image_url=image_url_for_llm,
+            image_path=image_url_for_llm,
             system_prompt=system_prompt,
             stream=False,
         )
@@ -306,7 +306,7 @@ async def qa_stream(ws: WebSocket, task_id: str):
         t0 = time.time()
         try:
             stream = await llm_client.call_llm(
-                prompt=text, image_url=media_url,
+                prompt=text, image_path=media_url,
                 system_prompt=system_prompt, stream=True,
             )
             full_answer = ""
