@@ -1,6 +1,7 @@
 var request = require('../../utils/request.js').request;
 var upload = require('../../utils/upload.js');
 var speech = require('../../utils/speech.js');
+var storage = require('../../utils/storage.js');
 
 var RecordState = { IDLE: 'idle', RECORDING: 'recording', UPLOADING: 'uploading', THINKING: 'thinking' };
 var CatState = { LISTEN: 'listen', THINK: 'think', SPEAK: 'speak' };
@@ -23,7 +24,8 @@ Page({
     bottomBarHeight: 300,
     safeAreaBottom: 0,
     sessionId: null,
-    userId: ''
+    userId: '',
+    fontSize: 'normal'
   },
 
   onLoad: function() {
@@ -36,7 +38,8 @@ Page({
       navBarHeight: (sys.statusBarHeight || 20) + 44,
       safeAreaBottom: safeBottom,
       bottomBarHeight: 220 + safeBottom,
-      userId: refId ? '老人id' + refId : ''
+      userId: refId ? '老人id' + refId : '',
+      fontSize: storage.get('fontSize', 'normal')
     });
     this.recorderManager = null;
     this.cameraContext = null;
