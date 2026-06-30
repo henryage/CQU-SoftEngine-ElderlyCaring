@@ -6,7 +6,7 @@
     <view class="nav-content">
       <view class="nav-back" bindtap="onGoBack">‹ 返回</view>
       <view class="nav-title">聊天</view>
-      <view class="nav-placeholder"></view>
+      <view class="nav-user-id">{{userId}}</view>
     </view>
   </view>
 
