@@ -1,0 +1,25 @@
+<view class="page-container">
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <view class="nav-back" bindtap="onGoBack">‹ 返回</view>
+      <view class="nav-title">紧急呼叫</view>
+      <view class="nav-placeholder"></view>
+    </view>
+  </view>
+
+  <view class="content-area">
+    <view class="warning-icon">⚠️</view>
+    <view class="warning-title">紧急情况</view>
+    <view class="warning-desc">点击下方按钮通知家人，紧急情况请拨打120</view>
+
+    <view class="emergency-btn" bindtap="onEmergencyCall">
+      <text>🆘 通知家人</text>
+    </view>
+
+    <view class="call120-btn" bindtap="onCall120">
+      <text>📞 拨打120</text>
+    </view>
+
+    <view wx:if="{{resultText}}" class="result-text">{{resultText}}</view>
+  </view>
+</view>

@@ -1,0 +1,38 @@
+<view class="page-container">
+  <view class="dark-overlay"></view>
+
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <view class="nav-title">耄耋关怀</view>
+    </view>
+  </view>
+
+  <view class="main-area">
+    <view class="cat-section">
+      <image class="cat-big" src="/images/cat/speak.png" mode="aspectFit"></image>
+      <view class="welcome-text">喵喵~有什么我能帮您的？</view>
+    </view>
+
+    <view class="menu-grid">
+      <view class="menu-item menu-chat" bindtap="onGoChat">
+        <view class="menu-icon">💬</view>
+        <view class="menu-label">开始聊天</view>
+      </view>
+
+      <view class="menu-item menu-reminder" bindtap="onGoReminder">
+        <view class="menu-icon">💊</view>
+        <view class="menu-label">用药提醒</view>
+      </view>
+
+      <view class="menu-item menu-emergency" bindtap="onGoEmergency">
+        <view class="menu-icon">🆘</view>
+        <view class="menu-label">紧急呼叫</view>
+      </view>
+
+      <view class="menu-item menu-settings" bindtap="onGoSettings">
+        <view class="menu-icon">⚙️</view>
+        <view class="menu-label">设置</view>
+      </view>
+    </view>
+  </view>
+</view>

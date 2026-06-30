@@ -1,0 +1,34 @@
+<view class="page-container">
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <view class="nav-back" bindtap="onGoBack">‹ 返回</view>
+      <view class="nav-title">设置</view>
+      <view class="nav-placeholder"></view>
+    </view>
+  </view>
+
+  <view class="settings-list">
+    <view class="setting-item">
+      <view class="setting-label">字体大小</view>
+      <view class="setting-control">
+        <view class="size-btn {{fontSize === 'normal' ? 'active' : ''}}" bindtap="onSetFontSize" data-size="normal">标准</view>
+        <view class="size-btn {{fontSize === 'large' ? 'active' : ''}}" bindtap="onSetFontSize" data-size="large">大</view>
+        <view class="size-btn {{fontSize === 'xlarge' ? 'active' : ''}}" bindtap="onSetFontSize" data-size="xlarge">超大</view>
+      </view>
+    </view>
+
+    <view class="setting-item">
+      <view class="setting-label">语音播报</view>
+      <switch checked="{{voiceEnabled}}" bindchange="onVoiceToggle" color="#07C160"></switch>
+    </view>
+
+    <view class="setting-item">
+      <view class="setting-label">当前版本</view>
+      <view class="setting-value">v1.0.0</view>
+    </view>
+
+    <view class="setting-item logout-item" bindtap="onLogout">
+      <view class="setting-label logout-text">退出登录</view>
+    </view>
+  </view>
+</view>
