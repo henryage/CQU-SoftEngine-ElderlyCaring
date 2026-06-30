@@ -22,21 +22,17 @@ Page({
     navBarHeight: 88,
     bottomBarHeight: 300,
     safeAreaBottom: 0,
-    sessionId: null,
-    userId: ''
+    sessionId: null
   },
 
   onLoad: function() {
     var sys = wx.getSystemInfoSync();
     var safeBottom = sys.safeArea ? (sys.screenHeight - sys.safeArea.bottom) : 0;
-    var app = getApp();
-    var refId = app.globalData.refId;
     this.setData({
       statusBarHeight: sys.statusBarHeight || 20,
       navBarHeight: (sys.statusBarHeight || 20) + 44,
       safeAreaBottom: safeBottom,
-      bottomBarHeight: 220 + safeBottom,
-      userId: refId ? '老人id' + refId : ''
+      bottomBarHeight: 220 + safeBottom
     });
     this.recorderManager = null;
     this.cameraContext = null;
@@ -231,7 +227,6 @@ Page({
     request({
       url: '/api/v1/qa/ask',
       method: 'POST',
-      timeout: mediaUrl ? 180000 : 30000,
       data: {
         input_type: inputType,
         text: asrText || '',
