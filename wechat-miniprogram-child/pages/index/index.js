@@ -2,19 +2,15 @@ const app = getApp()
 
 Page({
   data: {
-    isBound: false,
-    boundElderlyName: ''
+    loading: false,
+    childId: ''
   },
 
   onShow() {
-    const elderlyId = app.getBoundElderlyId()
-    const elderlyName = app.getBoundElderlyName()
-    this.setData({
-      isBound: !!elderlyId,
-      boundElderlyName: elderlyName
-    })
+    this.setData({ childId: app.getChildId() || '' })
   },
 
+  // 导航到各功能页
   goToBind()       { wx.navigateTo({ url: '/subpkg-manage/pages/bind/bind' }) },
   goToHealth()     { wx.navigateTo({ url: '/subpkg-health/pages/health/health' }) },
   goToMedication() { wx.navigateTo({ url: '/subpkg-health/pages/medication/medication' }) },

@@ -1,100 +1,94 @@
-const { api } = require('./utils/api')
+const { login, healthCheck } = require('./utils/api')
 
 App({
   onLaunch() {
     this.initGlobalData()
-    // 跳过登录检查，直接进入首页
-  },
-
-  onShow() {
-    if (this.getToken()) {
-      this.startHeartbeat()
-    }
-  },
-
-  onHide() {
-    this.stopHeartbeat()
+    this.checkLogin()
   },
 
   initGlobalData() {
     this.globalData = {
       token: '',
       refreshToken: '',
-      userId: null,
+      childId: null,
       nickname: '子女用户',
       userType: 'child',
-      sessionId: null,
-      boundElderlyId: null,
-      boundElderlyName: ''
+      currentElderly: null
     }
 
-    const savedToken = wx.getStorageSync('token')
-    const savedRefreshToken = wx.getStorageSync('refresh_token')
-    const savedUserId = wx.getStorageSync('user_id')
-    const savedNickname = wx.getStorageSync('nickname')
-    const boundElderlyId = wx.getStorageSync('bound_elderly_id')
-    const boundElderlyName = wx.getStorageSync('bound_elderly_name')
-
-    if (savedToken) this.globalData.token = savedToken
-    if (savedRefreshToken) this.globalData.refreshToken = savedRefreshToken
-    if (savedUserId) this.globalData.userId = savedUserId
-    if (savedNickname) this.globalData.nickname = savedNickname
-    if (boundElderlyId) this.globalData.boundElderlyId = boundElderlyId
-    if (boundElderlyName) this.globalData.boundElderlyName = boundElderlyName
+    this.globalData.token = wx.getStorageSync('token') || ''
+    this.globalData.refreshToken = wx.getStorageSync('refresh_token') || ''
+    this.globalData.childId = wx.getStorageSync('child_id') || null
+    this.globalData.nickname = wx.getStorageSync('nickname') || '子女用户'
   },
 
-  getToken() {
-    return this.globalData.token
-  },
-
-  setToken(token) {
-    this.globalData.token = token
-    wx.setStorageSync('token', token)
-  },
-
-  getUserId() {
-    return this.globalData.userId
-  },
-
-  getNickname() {
-    return this.globalData.nickname
-  },
-
-  getBoundElderlyId() {
-    return this.globalData.boundElderlyId
-  },
-
-  setBoundElderlyId(elderlyId) {
-    this.globalData.boundElderlyId = elderlyId
-    wx.setStorageSync('bound_elderly_id', elderlyId)
-  },
-
-  getBoundElderlyName() {
-    return this.globalData.boundElderlyName
-  },
-
-  setBoundElderlyName(name) {
-    this.globalData.boundElderlyName = name
-    wx.setStorageSync('bound_elderly_name', name)
-  },
-
-  heartbeatTimer: null,
-
-  startHeartbeat() {
-    if (this.heartbeatTimer) clearInterval(this.heartbeatTimer)
-    const sendHeartbeat = async () => {
-      try { await api.heartbeat() } catch (err) { console.error('心跳失败:', err) }
+  checkLogin() {
+    if (!this.globalData.childId) {
+      wx.reLaunch({ url: '/pages/login/login' })
+      return
     }
-    sendHeartbeat()
-    this.heartbeatTimer = setInterval(sendHeartbeat, 30000)
+    // 后台静默续 token
+    this.silentRefreshToken()
   },
 
-  stopHeartbeat() {
-    if (this.heartbeatTimer) {
-      clearInterval(this.heartbeatTimer)
-      this.heartbeatTimer = null
+  async silentRefreshToken() {
+    if (!this.globalData.refreshToken) return
+    try {
+      const { refreshToken } = require('./utils/api')
+      const data = await refreshToken(this.globalData.refreshToken)
+      if (data && data.token) {
+        this.globalData.token = data.token
+        wx.setStorageSync('token', data.token)
+      }
+    } catch (e) {
+      // 刷新失败：尝试重新 wx-login
+      try {
+        const codeResp = await new Promise((resolve, reject) => {
+          wx.login({ success: resolve, fail: reject })
+        })
+        const data = await login(codeResp.code, 'child')
+        if (data && data.token) {
+          this.globalData.token = data.token
+          this.globalData.refreshToken = data.refresh_token
+          wx.setStorageSync('token', data.token)
+          wx.setStorageSync('refresh_token', data.refresh_token)
+        }
+      } catch (e2) { /* 静默失败 */ }
     }
   },
+
+  doLogin(refId, tokenData = {}) {
+    this.globalData.childId = refId
+    this.globalData.token = tokenData.token || ''
+    this.globalData.refreshToken = tokenData.refresh_token || ''
+    this.globalData.nickname = tokenData.nickname || ('子女' + refId)
+
+    wx.setStorageSync('child_id', refId)
+    wx.setStorageSync('token', tokenData.token || '')
+    wx.setStorageSync('refresh_token', tokenData.refresh_token || '')
+    wx.setStorageSync('nickname', tokenData.nickname || ('子女' + refId))
+  },
+
+  doLogout() {
+    this.globalData.token = ''
+    this.globalData.refreshToken = ''
+    this.globalData.childId = null
+    this.globalData.nickname = '子女用户'
+    this.globalData.currentElderly = null
+
+    wx.setStorageSync('token', '')
+    wx.setStorageSync('refresh_token', '')
+    wx.setStorageSync('child_id', '')
+    wx.setStorageSync('nickname', '')
+
+    wx.reLaunch({ url: '/pages/login/login' })
+  },
+
+  getToken() { return this.globalData.token },
+  getChildId() { return this.globalData.childId },
+  getNickname() { return this.globalData.nickname },
+  getCurrentElderly() { return this.globalData.currentElderly },
+  setCurrentElderly(u) { this.globalData.currentElderly = u },
 
   globalData: {}
 })

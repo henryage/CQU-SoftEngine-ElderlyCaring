@@ -1,19 +1,14 @@
-const app = getApp()
-
 Page({
-  data: {
-    isBound: false,
-    alerts: []
-  },
+  data: { loading: false, alerts: [] },
 
   onShow() {
-    this.setData({
-      isBound: !!app.getBoundElderlyId()
-    })
+    this.setData({ alerts: [], loading: false })
   },
 
-  // 预警功能暂未实现
-  onPullDownRefresh() {
-    wx.stopPullDownRefresh()
-  }
+  doHandle() {
+    wx.showToast({ title: '后端尚未实现预警列表/处置接口', icon: 'none', duration: 2000 })
+  },
+
+  goToIndex() { wx.switchTab({ url: '/pages/index/index' }) },
+  goToProfile() { wx.switchTab({ url: '/pages/profile/profile' }) }
 })

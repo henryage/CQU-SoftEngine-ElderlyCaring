@@ -2,41 +2,32 @@ const app = getApp()
 
 Page({
   data: {
-    nickname: '子女用户',
-    isBound: false,
-    boundElderlyName: ''
+    nickname: '',
+    childId: ''
   },
 
   onShow() {
-    this.loadProfile()
+    this.setData({
+      nickname: app.getNickname(),
+      childId: app.getChildId()
+    })
   },
 
-  loadProfile() {
-    const nickname = app.getNickname() || '子女用户'
-    const elderlyId = app.getBoundElderlyId()
-    const elderlyName = app.getBoundElderlyName() || ''
-    this.setData({
-      nickname: nickname,
-      isBound: !!elderlyId,
-      boundElderlyName: elderlyName
-    })
+  goToAlerts() {
+    wx.switchTab({ url: '/pages/alert/alert' })
   },
 
   goToBind() {
     wx.navigateTo({ url: '/subpkg-manage/pages/bind/bind' })
   },
 
-  noop() {},
-
-  logout() {
+  doSwitchAccount() {
     wx.showModal({
-      title: '退出登录',
-      content: '确定要退出登录吗？',
+      title: '切换账号',
+      content: '切换后将清除当前登录信息，需要重新输入子女 ID',
       success: (res) => {
         if (res.confirm) {
-          wx.clearStorageSync()
-          app.globalData = {}
-          wx.reLaunch({ url: '/pages/index/index' })
+          app.doLogout()
         }
       }
     })

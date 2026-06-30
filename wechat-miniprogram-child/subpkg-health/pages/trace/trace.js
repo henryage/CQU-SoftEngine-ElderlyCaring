@@ -1,17 +1,8 @@
-const app = getApp()
-
 Page({
-  data: {
-    isBound: false
-  },
+  data: { traces: null },
 
-  onShow() {
-    this.setData({
-      isBound: !!app.getBoundElderlyId()
-    })
-  },
+  onShow() { this.setData({ traces: null }) },
 
-  onPullDownRefresh() {
-    wx.stopPullDownRefresh()
-  }
+  goBack() { wx.switchTab({ url: '/pages/index/index' }) },
+  goToMedication() { wx.navigateTo({ url: '/subpkg-health/pages/medication/medication' }) }
 })

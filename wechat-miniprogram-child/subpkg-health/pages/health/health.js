@@ -1,13 +1,11 @@
-const app = getApp()
-
 Page({
-  data: {
-    isBound: false
-  },
+  data: { loading: false, dashboard: null },
 
   onShow() {
-    this.setData({
-      isBound: !!app.getBoundElderlyId()
-    })
-  }
+    this.setData({ dashboard: null, loading: false })
+  },
+
+  goBack() { wx.switchTab({ url: '/pages/index/index' }) },
+  goToAlerts() { wx.switchTab({ url: '/pages/alert/alert' }) },
+  goToMedication() { wx.navigateTo({ url: '/subpkg-health/pages/medication/medication' }) }
 })

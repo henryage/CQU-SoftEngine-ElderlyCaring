@@ -1,13 +1,8 @@
-const app = getApp()
-
 Page({
-  data: {
-    isBound: false
-  },
+  data: { reminders: null },
 
-  onShow() {
-    this.setData({
-      isBound: !!app.getBoundElderlyId()
-    })
-  }
+  onShow() { this.setData({ reminders: null }) },
+
+  goBack() { wx.switchTab({ url: '/pages/index/index' }) },
+  goToTrace() { wx.navigateTo({ url: '/subpkg-health/pages/trace/trace' }) }
 })

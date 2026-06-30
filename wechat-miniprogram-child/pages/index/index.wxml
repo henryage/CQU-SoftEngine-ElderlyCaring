@@ -1,22 +1,22 @@
 <view class="container">
+  <!-- 头部标题 -->
   <view class="page-header">
     <view class="page-header-title">孝心守护</view>
-    <view wx:if="{{isBound}}" class="page-header-sub">{{boundElderlyName || '老人'}} · 已绑定守护中</view>
-    <view wx:else class="page-header-sub" bindtap="goToBind">尚未绑定老人 · 点击绑定</view>
+    <view class="page-header-sub">守护家人健康</view>
   </view>
 
-  <view wx:if="{{!isBound}}" class="card text-center">
-    <view class="text-lg mb-20">绑定老人账号</view>
-    <view class="text-sm text-gray mb-20">绑定后可查看老人健康状态、行为轨迹、预警通知等信息</view>
-    <view class="btn-primary" bindtap="goToBind">前往绑定</view>
+  <!-- 当前子女 ID -->
+  <view class="card" style="padding:20rpx 30rpx;font-size:24rpx;color:#999;">
+    child_id: {{childId}}<text style="margin-left:16rpx;color:#bbb;">（后端 child 路由开发中，功能即将上线）</text>
   </view>
 
+  <!-- 功能入口网格 -->
   <view class="card">
     <view class="text-lg text-bold mb-20">功能服务</view>
     <view class="func-grid">
       <view class="func-item" bindtap="goToHealth">
         <view class="func-icon icon-health">心</view>
-        <view class="func-label">健康画像</view>
+        <view class="func-label">健康看板</view>
       </view>
       <view class="func-item" bindtap="goToMedication">
         <view class="func-icon icon-med">药</view>
@@ -28,7 +28,7 @@
       </view>
       <view class="func-item" bindtap="goToHistory">
         <view class="func-icon icon-history">答</view>
-        <view class="func-label">问答历史</view>
+        <view class="func-label">问答记录</view>
       </view>
       <view class="func-item" bindtap="goToMessage">
         <view class="func-icon icon-msg">聊</view>
@@ -44,7 +44,7 @@
       </view>
       <view class="func-item" bindtap="goToKnowledge">
         <view class="func-icon icon-know">库</view>
-        <view class="func-label">知识库</view>
+        <view class="func-label">健康画像</view>
       </view>
       <view class="func-item" bindtap="goToBind">
         <view class="func-icon icon-bind">绑</view>

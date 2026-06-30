@@ -1,6 +1,7 @@
 {
   "lazyCodeLoading": "requiredComponents",
   "pages": [
+    "pages/login/login",
     "pages/index/index",
     "pages/alert/alert",
     "pages/profile/profile"

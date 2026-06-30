@@ -1,13 +1,26 @@
-<view class="container">
+<view class="container with-bottom-nav">
   <view class="page-header">
-    <view class="page-header-title">问答历史</view>
-    <view class="page-header-sub">对应数据库: message · 查看老人咨询记录与AI回复</view>
+    <view class="page-header-title">问答记录</view>
+    <view class="page-header-sub">查看老人的咨询轨迹</view>
   </view>
 
-  <view class="card">
-    <view class="text-lg text-bold mb-20">咨询记录</view>
-    <view class="empty-state" style="padding:40rpx;">
-      <view class="text-sm text-gray">暂无问答记录</view>
+  <view class="card text-center">
+    <view class="text-sm text-gray mb-20">后端 child 路由开发中，功能即将上线</view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="bottom-nav-item" bindtap="goBack">
+      <view class="bottom-nav-icon">&#9750;</view>
+      <view>首页</view>
+    </view>
+    <view class="bottom-nav-item active">
+      <view class="bottom-nav-icon">&#9997;</view>
+      <view>问答</view>
+    </view>
+    <view class="bottom-nav-item" bindtap="goToMessage">
+      <view class="bottom-nav-icon">&#9993;</view>
+      <view>通信</view>
     </view>
   </view>
 </view>

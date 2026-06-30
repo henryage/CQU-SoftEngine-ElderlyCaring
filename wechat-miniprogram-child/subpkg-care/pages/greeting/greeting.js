@@ -1,13 +1,8 @@
-const app = getApp()
-
 Page({
-  data: {
-    isBound: false
-  },
+  data: { dashboard: null },
 
-  onShow() {
-    this.setData({
-      isBound: !!app.getBoundElderlyId()
-    })
-  }
+  onShow() { this.setData({ dashboard: null }) },
+
+  goBack() { wx.switchTab({ url: '/pages/index/index' }) },
+  goToMessage() { wx.navigateTo({ url: '/subpkg-care/pages/message/message' }) }
 })

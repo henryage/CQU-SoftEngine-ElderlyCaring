@@ -1,48 +1,70 @@
-<view class="container">
+<view class="container with-bottom-nav">
   <view class="page-header">
-    <view class="page-header-title">知识库管理</view>
-    <view class="page-header-sub">对应数据库: long_term_memory · RAG知识库与合规词管理</view>
+    <view class="page-header-title">健康画像</view>
+    <view class="page-header-sub">用户长期记忆与健康档案</view>
   </view>
 
-  <!-- 知识条目管理 -->
-  <view class="card">
-    <view class="text-lg text-bold mb-20">知识条目</view>
-    <view class="flex-between mb-20">
-      <view class="text-sm text-gray">管理AI可检索的知识条目</view>
-      <view class="btn-primary" style="padding:12rpx 24rpx;font-size:24rpx;margin-top:0;">+ 添加</view>
-    </view>
-    <view class="empty-state" style="padding:40rpx;">
-      <view class="text-sm text-gray">暂无自定义知识条目</view>
-    </view>
-  </view>
+  <view wx:if="{{loading}}" class="loading"><view class="loading-text">加载中...</view></view>
 
-  <!-- 敏感词拦截 -->
-  <view class="card">
-    <view class="text-lg text-bold mb-20">敏感词拦截规则</view>
-    <view class="flex-between mb-20">
-      <view class="text-sm text-gray">管理用药敏感词与合规拦截规则</view>
-      <view class="btn-primary" style="padding:12rpx 24rpx;font-size:24rpx;margin-top:0;">+ 添加</view>
-    </view>
-    <view class="empty-state" style="padding:40rpx;">
-      <view class="text-sm text-gray">暂无自定义规则</view>
-    </view>
-  </view>
-
-  <!-- 提示词模板 -->
-  <view class="card">
-    <view class="list-item" bindtap="noop">
-      <view class="list-item-left">
-        <view class="list-item-icon" style="background-color:#F0F5FF;">📄</view>
-        <view class="text-md">系统提示词</view>
+  <view wx:else>
+    <view wx:if="{{memories.length === 0}}" class="card">
+      <view class="empty-state" style="padding:40rpx;">
+        <view class="text-sm text-gray">暂无记忆条目</view>
       </view>
-      <view class="list-item-arrow">></view>
     </view>
-    <view class="list-item" bindtap="noop">
-      <view class="list-item-left">
-        <view class="list-item-icon" style="background-color:#FFF7E6;">📋</view>
-        <view class="text-md">合规知识包</view>
+
+    <view wx:for="{{memories}}" wx:key="memory_id" class="card">
+      <view class="flex-between mb-10">
+        <view class="text-lg text-bold" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+          {{item.summary || item.content}}
+        </view>
+        <view wx:if="{{item.memory_type}}" class="tag tag-info">{{item.memory_type}}</view>
+        <view wx:if="{{item.importance}}" class="text-sm" style="margin-left:8rpx;">
+          {{item.importanceStars || ''}}
+        </view>
       </view>
-      <view class="list-item-arrow">></view>
+      <view class="text-sm text-gray mb-10">{{item.content}}</view>
+      <view class="flex-between">
+        <view class="text-sm text-gray" style="font-size:20rpx;">来源: {{item.source}} · {{item.created_at}}</view>
+        <view class="btn-secondary" style="padding:4rpx 16rpx;font-size:20rpx;" bindtap="doDelete" data-id="{{item.memory_id}}" data-summary="{{item.summary || item.content}}">删除</view>
+      </view>
+    </view>
+
+    <view class="card text-center">
+      <view class="btn-primary" bindtap="showAddModal">+ 新增记忆条目</view>
+    </view>
+  </view>
+
+  <!-- 添加弹窗 -->
+  <view wx:if="{{showAddModal}}" class="modal">
+    <view class="modal-content">
+      <view class="text-lg text-bold mb-20">新增记忆条目</view>
+      <view class="text-sm text-gray mb-10">类型</view>
+      <input class="bind-input" style="margin-bottom:16rpx;" type="text" placeholder="用药 / 健康 / 偏好 / 医嘱 / 通用" value="{{newMemoryType}}" bindinput="onTypeInput" />
+      <view class="text-sm text-gray mb-10">内容</view>
+      <textarea class="bind-input" style="margin-bottom:16rpx;height:160rpx;" placeholder="请输入记忆内容" value="{{newContent}}" bindinput="onContentInput" maxlength="5000" />
+      <view class="text-sm text-gray mb-10">重要度 (1-5)</view>
+      <input class="bind-input" style="margin-bottom:16rpx;" type="number" placeholder="1-5，5最重要" value="{{newImportance}}" bindinput="onImportanceInput" />
+      <view class="flex-between">
+        <view class="btn-secondary" bindtap="hideAddModal">取消</view>
+        <view class="btn-primary" bindtap="doCreate">确认添加</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="bottom-nav-item" bindtap="goBack">
+      <view class="bottom-nav-icon">&#9750;</view>
+      <view>首页</view>
+    </view>
+    <view class="bottom-nav-item active">
+      <view class="bottom-nav-icon">&#9733;</view>
+      <view>画像</view>
+    </view>
+    <view class="bottom-nav-item" bindtap="goToSettings">
+      <view class="bottom-nav-icon">&#9881;</view>
+      <view>设置</view>
     </view>
   </view>
 </view>
