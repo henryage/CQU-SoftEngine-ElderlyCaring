@@ -56,11 +56,19 @@ class Settings(BaseSettings):
     upload_dir: str = "./data/uploads"
     upload_url_prefix: str = "/files"
 
+    # Whisper 模型本地存放
+    whisper_model_dir: str = "./data/whisper_models"
+
     # LLM
     llm_api_base: str = "https://api.example.com/v1"
     llm_api_key: str = ""
     llm_model: str = "gpt-4o-mini"
     llm_timeout: int = 60
+
+    # 远程推理（Qwen3-Embedding-8B + Qwen3-VL-30B）
+    embedding_api_url: str = "http://10.246.2.7:8001"
+    vlm_api_url: str = "http://10.246.2.7:8002"
+    use_remote_inference: bool = False
 
     # 审计
     audit_retain_days: int = 180

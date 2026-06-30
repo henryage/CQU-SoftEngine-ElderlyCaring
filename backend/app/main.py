@@ -104,9 +104,20 @@ app = FastAPI(
         {"name": "memory", "description": "长期记忆（RAG知识库）：CRUD、语义检索、Chroma向量库"},
         {"name": "alert", "description": "预警：老人端紧急呼叫、子女端处置（后续扩展）"},
         {"name": "reminder", "description": "用药提醒：老人端查看、子女端配置（后续扩展）"},
+        {"name": "child", "description": "子女端：绑定老人、健康看板、问答下钻、适老化配置下发"},
+        {"name": "comm", "description": "通信：子女→老人留言（后续扩展语音/问候）"},
     ],
     lifespan=lifespan,
 )
+
+# 全局异常捕获
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error("未处理异常 [%s %s]: %s", request.method, request.url.path, exc, exc_info=True)
+    return JSONResponse(status_code=500, content={"detail": str(exc)})
 
 # CORS
 origins = ["*"] if settings.cors_origins == "*" else settings.cors_origins.split(",")
