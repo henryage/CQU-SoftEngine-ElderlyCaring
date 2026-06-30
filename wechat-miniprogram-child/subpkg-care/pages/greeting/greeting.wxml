@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="page-header">
+    <view class="page-header-title">定时问候</view>
+    <view class="page-header-sub">对应数据库: greeting_schedule · 预设问候定时推送给老人</view>
+  </view>
+
+  <!-- 新建问候 -->
+  <view class="card">
+    <view class="flex-center">
+      <view class="btn-primary" style="width:100%;">+ 新建定时问候</view>
+    </view>
+  </view>
+
+  <!-- 问候列表 -->
+  <view class="card">
+    <view class="text-lg text-bold mb-20">问候计划</view>
+    <view class="empty-state" style="padding:40rpx;">
+      <view class="text-sm text-gray">暂无定时问候</view>
+    </view>
+  </view>
+</view>

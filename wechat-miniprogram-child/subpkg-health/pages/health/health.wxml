@@ -1,0 +1,30 @@
+<view class="container">
+  <view class="page-header">
+    <view class="page-header-title">健康画像</view>
+    <view class="page-header-sub">对应数据库: user_profile + user_profile_dimension</view>
+  </view>
+
+  <!-- 用药习惯 -->
+  <view class="card">
+    <view class="text-lg text-bold mb-20">用药习惯</view>
+    <view class="empty-state" style="padding:40rpx;">
+      <view class="text-sm text-gray">暂无数据</view>
+    </view>
+  </view>
+
+  <!-- 作息规律 -->
+  <view class="card">
+    <view class="text-lg text-bold mb-20">作息规律</view>
+    <view class="empty-state" style="padding:40rpx;">
+      <view class="text-sm text-gray">暂无数据</view>
+    </view>
+  </view>
+
+  <!-- 健康标签 -->
+  <view class="card">
+    <view class="text-lg text-bold mb-20">健康标签</view>
+    <view class="empty-state" style="padding:40rpx;">
+      <view class="text-sm text-gray">暂无数据</view>
+    </view>
+  </view>
+</view>

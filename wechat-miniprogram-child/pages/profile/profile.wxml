@@ -1,47 +1,41 @@
 <view class="container">
-  <!-- 个人信息 -->
   <view class="card text-center" style="padding:50rpx 30rpx;">
     <view class="flex-center" style="margin-bottom:20rpx;">
-      <view style="width:120rpx;height:120rpx;border-radius:60rpx;background-color:#4A90D9;color:#fff;display:flex;align-items:center;justify-content:center;font-size:48rpx;">
-        {{nickname[0] || '子'}}
-      </view>
+      <view class="avatar">{{nickname[0] || '子'}}</view>
     </view>
     <view class="text-lg text-bold">{{nickname}}</view>
   </view>
 
-  <!-- 绑定状态 -->
   <view class="card">
     <view class="list-item" bindtap="goToBind">
       <view class="list-item-left">
-        <view class="list-item-icon" style="background-color:#E6F7FF;">🔗</view>
+        <view class="list-item-icon icon-bind-sm">绑</view>
         <view>
           <view class="text-md">老人绑定</view>
           <view class="text-sm text-gray mt-10">{{isBound ? '已绑定 ' + boundElderlyName : '未绑定'}}</view>
         </view>
       </view>
-      <view class="list-item-arrow">></view>
+      <view class="list-item-arrow">&gt;</view>
     </view>
   </view>
 
-  <!-- 设置 -->
   <view class="card">
     <view class="list-item" bindtap="noop">
       <view class="list-item-left">
-        <view class="list-item-icon" style="background-color:#F0F5FF;">🔔</view>
+        <view class="list-item-icon icon-notify-sm">铃</view>
         <view class="text-md">消息通知</view>
       </view>
-      <view class="list-item-arrow">></view>
+      <view class="list-item-arrow">&gt;</view>
     </view>
     <view class="list-item" bindtap="noop">
       <view class="list-item-left">
-        <view class="list-item-icon" style="background-color:#FFF7E6;">ℹ️</view>
+        <view class="list-item-icon icon-about-sm">i</view>
         <view class="text-md">关于我们</view>
       </view>
-      <view class="list-item-arrow">></view>
+      <view class="list-item-arrow">&gt;</view>
     </view>
   </view>
 
-  <!-- 退出登录 -->
   <view class="mt-20">
     <view class="btn-secondary" bindtap="logout">退出登录</view>
   </view>

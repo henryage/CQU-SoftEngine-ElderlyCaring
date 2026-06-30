@@ -23,12 +23,10 @@ Page({
   },
 
   goToBind() {
-    wx.navigateTo({ url: '/pages/bind/bind' })
+    wx.navigateTo({ url: '/subpkg-manage/pages/bind/bind' })
   },
 
-  noop() {
-    // 功能暂未实现
-  },
+  noop() {},
 
   logout() {
     wx.showModal({
