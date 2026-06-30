@@ -29,7 +29,7 @@ function uploadFile(filePath, type) {
       filePath: filePath,
       name: 'file',
       header: header,
-      timeout: type === 'image' ? 120000 : 60000,
+      timeout: type === 'image' ? 180000 : 60000,
       success: function(res) {
         wx.hideNavigationBarLoading();
         try {
