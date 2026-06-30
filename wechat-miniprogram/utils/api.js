@@ -1,5 +1,5 @@
 const USE_MOCK = false
-const BASE_URL = 'http://10.128.229.199:8090'
+const BASE_URL = 'http://10.242.5.159:8090'
 
 let isRefreshing = false
 let refreshQueue = []
