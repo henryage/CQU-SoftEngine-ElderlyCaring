@@ -12,8 +12,7 @@
       "name": "health",
       "pages": [
         "pages/health/health",
-        "pages/medication/medication",
-        "pages/trace/trace"
+        "pages/medication/medication"
       ]
     },
     {

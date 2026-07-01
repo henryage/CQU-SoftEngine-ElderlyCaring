@@ -1,26 +1,55 @@
-<view class="container with-bottom-nav">
+<view class="container">
   <view class="page-header">
     <view class="page-header-title">亲情通信</view>
-    <view class="page-header-sub">查看与老人的通信记录</view>
+    <view class="page-header-sub">给老人发送留言</view>
   </view>
 
-  <view class="card text-center">
-    <view class="text-sm text-gray mb-20">后端 child 路由开发中，功能即将上线</view>
+  <!-- 老人选择器 -->
+  <view class="card" wx:if="{{bindedUsers.length > 0}}">
+    <view class="text-sm text-gray mb-10">选择老人</view>
+    <picker mode="selector" range="{{bindedUsers}}" range-key="nickname" bindchange="onElderSelect">
+      <view class="elder-picker">
+        <text wx:if="{{selectedNickname}}">{{selectedNickname}} (ID: {{selectedUserId}})</text>
+        <text wx:else class="text-gray">请选择已绑定的老人</text>
+        <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+  <view class="card text-center" wx:elif="{{bindedUsers.length === 0}}">
+    <view class="text-sm text-gray">暂无绑定老人，请先到「绑定」页绑定</view>
   </view>
 
-  <!-- 底部导航 -->
-  <view class="bottom-nav">
-    <view class="bottom-nav-item" bindtap="goBack">
-      <view class="bottom-nav-icon">&#9750;</view>
-      <view>首页</view>
+  <!-- 留言输入 -->
+  <view class="card" wx:if="{{selectedUserId}}">
+    <view class="text-lg text-bold mb-20">发送留言给 {{selectedNickname}}</view>
+    <view class="input-row mb-20">
+      <textarea class="bind-input" style="height:200rpx;" placeholder="输入留言内容..." value="{{msgContent}}" bindinput="onMsgInput" maxlength="500" />
     </view>
-    <view class="bottom-nav-item active">
-      <view class="bottom-nav-icon">&#9993;</view>
-      <view>通信</view>
-    </view>
-    <view class="bottom-nav-item" bindtap="goToGreeting">
-      <view class="bottom-nav-icon">&#9728;</view>
-      <view>问候</view>
-    </view>
+    <view class="btn-primary" bindtap="doSend" disabled="{{sending}}">{{sending ? '发送中...' : '发送留言'}}</view>
   </view>
+
+  <!-- 发送成功提示 -->
+  <view class="card" wx:if="{{sentMsg}}">
+    <view class="text-sm" style="color:#07C160;">上次发送成功：{{sentMsg}}</view>
+  </view>
+
+  <!-- 通信历史 -->
+  <view class="card" wx:if="{{selectedUserId}}">
+    <view class="text-lg text-bold mb-20">通信记录</view>
+    <view wx:if="{{history.length > 0}}">
+      <view wx:for="{{history}}" wx:key="comm_id" class="med-item" style="border-bottom:1rpx solid #f0f0f0;padding:16rpx 0;">
+        <view class="flex-between mb-8">
+          <view class="text-sm" style="color:#4A90D9;font-weight:bold;">
+            {{item.comm_type === 'text' ? '📝 文字' : '🎤 语音'}}
+          </view>
+          <view class="text-sm text-gray" style="font-size:20rpx;">{{item.comm_time}}</view>
+        </view>
+        <view class="text-sm" wx:if="{{item.content}}">{{item.content}}</view>
+        <view class="text-sm text-gray" wx:elif="{{item.duration_sec}}">语音时长: {{item.duration_sec}}秒</view>
+        <view class="text-sm text-gray" wx:else>（无内容）</view>
+      </view>
+    </view>
+    <view wx:else class="text-sm text-gray text-center">暂无通信记录</view>
+  </view>
+
 </view>

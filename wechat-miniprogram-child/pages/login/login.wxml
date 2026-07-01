@@ -1,25 +1,21 @@
 <view class="container">
   <view class="login-wrapper">
-    <!-- Logo 区域 -->
     <view class="login-header">
-      <view class="login-avatar">
-        <text>孝</text>
-      </view>
+      <view class="login-avatar"><text>孝</text></view>
       <view class="login-title">孝心守护</view>
       <view class="login-sub">子女端</view>
     </view>
 
-    <!-- 微信登录按钮 -->
-    <button class="wx-login-btn" bindtap="doWxLogin" loading="{{loading}}" disabled="{{loading}}">
-      <view class="wx-btn-content">
-        <text class="wx-btn-text">{{loading ? '登录中...' : '微信一键登录'}}</text>
-      </view>
+    <view class="input-row" style="width:100%">
+      <view class="text-sm text-gray mb-10">子女ID</view>
+      <input class="bind-input" type="text" placeholder="请输入子女ID" value="{{childId}}" bindinput="onIdInput" />
+    </view>
+
+    <button class="login-btn" bindtap="doLogin" loading="{{loading}}" disabled="{{loading}}">
+      {{loading ? '登录中...' : '登录'}}
     </button>
 
     <view wx:if="{{error}}" class="text-sm text-danger text-center" style="margin-top:24rpx;">{{error}}</view>
-
-    <view class="text-xs text-gray text-center" style="margin-top:60rpx;">
-      首次登录自动创建账号
-    </view>
+    <view class="text-xs text-gray text-center" style="margin-top:60rpx;">首次登录自动创建账号</view>
   </view>
 </view>

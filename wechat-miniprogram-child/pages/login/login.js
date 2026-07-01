@@ -3,24 +3,28 @@ const app = getApp()
 
 Page({
   data: {
+    childId: '',
     loading: false,
     error: ''
   },
 
-  async doWxLogin() {
+  onIdInput(e) {
+    this.setData({ childId: e.detail.value })
+  },
+
+  async doLogin() {
+    const id = this.data.childId.trim()
+    if (!id) {
+      wx.showToast({ title: '请输入子女ID', icon: 'none' })
+      return
+    }
     this.setData({ loading: true, error: '' })
 
     try {
-      // 调用微信登录获取临时 code
-      const codeResp = await new Promise((resolve, reject) => {
-        wx.login({ success: resolve, fail: reject })
-      })
-
-      // 后端用 code 换 openid，查/建 WxAccount + ChildUser，签发 JWT
-      const tokenData = await login(codeResp.code, 'child')
-
-      // tokenData = { token, refresh_token, token_type, user_type, ref_id, nickname }
+      // dev模式下code即openid，用childId作为code登录
+      const tokenData = await login(id, 'child')
       app.doLogin(tokenData.ref_id, tokenData)
+      wx.setStorageSync('login_id', id)
       wx.switchTab({ url: '/pages/index/index' })
     } catch (err) {
       this.setData({

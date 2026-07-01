@@ -14,7 +14,7 @@
       ></image>
     </view>
 
-    <view wx:if="{{content.text}}" class="bubble-text" style="font-size: {{textFontSize}}rpx;">{{content.text}}</view>
+    <view wx:if="{{content.text}}" class="bubble-text">{{content.text}}</view>
 
     <view wx:if="{{status === 'sending'}}" class="status-loading">
       <view class="loading-dot"></view>

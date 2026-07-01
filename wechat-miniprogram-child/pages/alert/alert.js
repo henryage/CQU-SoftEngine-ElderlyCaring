@@ -1,18 +1,36 @@
-Page({
-  data: { loading: false, alerts: [] },
+const { getBindedUsers } = require('../../utils/api')
+const app = getApp()
 
-  onShow() {
-    this.setData({ alerts: [], loading: false })
+Page({
+  data: {
+    loading: false,
+    bindedUsers: []
   },
 
-  doHandle() {
-    const app = getApp()
-    if (!app.isLoggedIn()) {
-      wx.showToast({ title: '请先登录', icon: 'none', duration: 1500 })
-      setTimeout(() => wx.navigateTo({ url: '/pages/login/login' }), 1500)
-      return
+  onShow() {
+    this.loadAlerts()
+  },
+
+  async loadAlerts() {
+    this.setData({ loading: true })
+    try {
+      const users = await getBindedUsers()
+      this.setData({ bindedUsers: users || [] })
+    } catch (err) {
+      console.error('加载预警信息失败:', err)
+    } finally {
+      this.setData({ loading: false })
     }
-    wx.showToast({ title: '后端尚未实现预警列表/处置接口', icon: 'none', duration: 2000 })
+  },
+
+  doHandle(e) {
+    const userId = e.currentTarget.dataset.uid
+    const alertCount = e.currentTarget.dataset.count
+    wx.showToast({
+      title: `老人${userId}有${alertCount}条待处理预警`,
+      icon: 'none',
+      duration: 2000
+    })
   },
 
   goToIndex() { wx.switchTab({ url: '/pages/index/index' }) },

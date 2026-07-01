@@ -1,26 +1,64 @@
-<view class="container with-bottom-nav">
+<view class="container">
   <view class="page-header">
     <view class="page-header-title">健康看板</view>
     <view class="page-header-sub">查看老人健康状态</view>
   </view>
 
-  <view class="card text-center">
-    <view class="text-sm text-gray mb-20">后端 child 路由开发中，功能即将上线</view>
+  <!-- 老人选择器 -->
+  <view class="card" wx:if="{{bindedUsers.length > 0}}">
+    <view class="text-sm text-gray mb-10">选择老人</view>
+    <picker mode="selector" range="{{bindedUsers}}" range-key="nickname" bindchange="onElderSelect">
+      <view class="elder-picker">
+        <text wx:if="{{selectedNickname}}">{{selectedNickname}} (ID: {{selectedUserId}})</text>
+        <text wx:else class="text-gray">请选择已绑定的老人</text>
+        <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+  <view class="card text-center" wx:elif="{{bindedUsers.length === 0}}">
+    <view class="text-sm text-gray">暂无绑定老人，请先到「绑定」页绑定</view>
   </view>
 
-  <!-- 底部导航 -->
-  <view class="bottom-nav">
-    <view class="bottom-nav-item active" bindtap="goBack">
-      <view class="bottom-nav-icon">&#9750;</view>
-      <view>首页</view>
+  <!-- 看板数据 -->
+  <block wx:if="{{dashboard}}">
+    <view class="card">
+      <view class="text-lg text-bold mb-20">{{dashboard.nickname}} 的健康看板</view>
+      <view class="dash-row">
+        <view class="dash-item">
+          <view class="dash-val" style="color:{{dashboard.is_online ? '#07C160' : '#999'}}">{{dashboard.is_online ? '在线' : '离线'}}</view>
+          <view class="dash-label">在线状态</view>
+        </view>
+        <view class="dash-item">
+          <view class="dash-val">{{dashboard.today_qa_count || 0}}</view>
+          <view class="dash-label">今日问答</view>
+        </view>
+        <view class="dash-item">
+          <view class="dash-val" style="color:{{dashboard.pending_alerts > 0 ? '#E74C3C' : '#333'}}">{{dashboard.pending_alerts || 0}}</view>
+          <view class="dash-label">待处理预警</view>
+        </view>
+        <view class="dash-item">
+          <view class="dash-val">{{dashboard.active_reminders || 0}}</view>
+          <view class="dash-label">活跃提醒</view>
+        </view>
+      </view>
+      <view wx:if="{{dashboard.health_tags && dashboard.health_tags.length > 0}}" class="mt-20">
+        <text wx:for="{{dashboard.health_tags}}" wx:key="*this" class="tag-warn">{{item}}</text>
+      </view>
     </view>
-    <view class="bottom-nav-item" bindtap="goToAlerts">
-      <view class="bottom-nav-icon">&#9888;</view>
-      <view>预警</view>
+
+    <!-- 最近问答 -->
+    <view class="card" wx:if="{{dashboard.recent_messages && dashboard.recent_messages.length > 0}}">
+      <view class="text-lg text-bold mb-20">最近问答</view>
+      <view class="qa-mini" wx:for="{{dashboard.recent_messages}}" wx:key="msg_id">
+        <view class="text-sm text-bold">Q: {{item.question || '[图片/语音]'}}</view>
+        <view class="text-sm text-gray">A: {{item.answer}}</view>
+        <view class="text-xs text-gray">{{item.time}}</view>
+      </view>
     </view>
-    <view class="bottom-nav-item" bindtap="goToMedication">
-      <view class="bottom-nav-icon">&#9829;</view>
-      <view>用药</view>
-    </view>
+  </block>
+
+  <view class="card text-center" wx:elif="{{selectedUserId && !loading}}">
+    <view class="text-sm text-gray">暂无数据</view>
   </view>
+
 </view>

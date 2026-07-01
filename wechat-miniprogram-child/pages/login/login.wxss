@@ -25,37 +25,15 @@
   background: #f0f0f0; padding: 4rpx 24rpx; border-radius: 20rpx;
 }
 
-/* 微信登录按钮 */
-.wx-login-btn {
+.login-btn {
   width: 100%;
   height: 96rpx;
   line-height: 96rpx;
-  background: linear-gradient(135deg, #07C160, #06AD56);
+  background: #4A90D9;
   border-radius: 48rpx;
-  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 600;
   border: none;
-  box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.3);
-  margin-top: 20rpx;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.wx-login-btn::after {
-  border: none;
-  border-radius: 0;
-  background: transparent;
-}
-
-.wx-login-btn[disabled] {
-  background: #c0c0c0;
-  box-shadow: none;
-}
-
-.wx-btn-content {
-  display: flex; align-items: center; justify-content: center;
-}
-
-.wx-btn-text {
-  color: #fff; font-size: 34rpx; font-weight: 600;
-  letter-spacing: 2rpx;
+  margin-top: 40rpx;
 }

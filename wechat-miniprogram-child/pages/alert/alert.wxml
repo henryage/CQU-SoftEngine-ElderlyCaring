@@ -4,7 +4,29 @@
     <view class="page-header-sub">实时守护老人安全</view>
   </view>
 
-  <view class="card text-center">
-    <view class="text-sm text-gray mb-20">后端 child 路由开发中\n预警列表/处置功能即将上线</view>
+  <view wx:if="{{bindedUsers.length > 0}}">
+    <view class="card" wx:for="{{bindedUsers}}" wx:key="user_id">
+      <view class="binded-item">
+        <view class="binded-info">
+          <view class="text-md text-bold">{{item.nickname || '老人' + item.user_id}}</view>
+          <view class="text-sm text-gray">user_id: {{item.user_id}} | 关系: {{item.relation}}</view>
+          <view class="text-sm" style="color:{{item.is_online ? '#07C160' : '#999'}}">
+            {{item.is_online ? '● 在线' : '○ 离线'}}
+          </view>
+        </view>
+        <view wx:if="{{item.unread_alerts > 0}}" style="text-align:right;">
+          <view class="text-md" style="color:#E74C3C;font-weight:bold;">{{item.unread_alerts}}条</view>
+          <view class="text-sm text-gray">未处理预警</view>
+          <view class="btn-danger-sm mt-10" data-uid="{{item.user_id}}" data-count="{{item.unread_alerts}}" bindtap="doHandle">查看详情</view>
+        </view>
+        <view wx:else style="text-align:right;">
+          <view class="text-sm" style="color:#07C160;">无预警</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card text-center" wx:elif="{{bindedUsers.length === 0 && !loading}}">
+    <view class="text-sm text-gray">暂无绑定老人，或所有老人无预警</view>
   </view>
 </view>

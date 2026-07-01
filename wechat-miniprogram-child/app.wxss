@@ -171,22 +171,67 @@ page {
 /* ===== 输入行 ===== */
 .input-row { width:100%; }
 
-/* ===== 页面底部导航栏 ===== */
-.bottom-nav {
+
+
+/* ===== 老人选择器 ===== */
+.elder-picker {
+  display:flex; align-items:center; justify-content:space-between;
+  background:#F5F5F5; border-radius:12rpx; padding:20rpx;
+  font-size:28rpx;
+}
+.picker-arrow { color:#999; font-size:22rpx; }
+
+/* ===== 绑定列表 ===== */
+.binded-item {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:24rpx 0; border-bottom:1rpx solid #f0f0f0;
+}
+.binded-item:last-child { border-bottom:none; }
+.binded-info { flex:1; }
+
+/* ===== 小号危险按钮 ===== */
+.btn-danger-sm {
+  background:#FF4D4F; color:#fff; border-radius:8rpx;
+  padding:10rpx 24rpx; font-size:24rpx; text-align:center;
+  display:inline-block;
+}
+.btn-danger-sm:active { background:#e04444; }
+
+/* ===== 健康看板 ===== */
+.dash-row { display:flex; flex-wrap:wrap; }
+.dash-item { width:25%; text-align:center; padding:16rpx 0; }
+.dash-val { font-size:36rpx; font-weight:bold; }
+.dash-label { font-size:22rpx; color:#999; margin-top:6rpx; }
+
+/* ===== 问答迷你 ===== */
+.qa-mini { margin-bottom:16rpx; }
+
+/* ===== 用药提醒 ===== */
+.med-item {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:24rpx 0; border-bottom:1rpx solid #f0f0f0;
+}
+.med-item:last-child { border-bottom:none; }
+.med-info { flex:1; }
+.med-actions { display:flex; flex-direction:column; gap:12rpx; }
+.action-edit { color:#4A90D9; font-size:26rpx; }
+.action-del { color:#FF4D4F; font-size:26rpx; }
+
+/* ===== 弹窗（表单） ===== */
+.modal-mask {
+  position:fixed; top:0; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,0.5); z-index:999;
+}
+.modal-card {
   position:fixed; bottom:0; left:0; right:0;
-  height:100rpx; background:#fff;
-  border-top:1rpx solid #f0f0f0;
-  display:flex; align-items:center; justify-content:space-around;
-  padding:0 20rpx; z-index:900;
-  padding-bottom:env(safe-area-inset-bottom);
+  background:#fff; border-radius:20rpx 20rpx 0 0;
+  padding:40rpx 30rpx; z-index:1000;
+  padding-bottom:calc(40rpx + env(safe-area-inset-bottom));
+  max-height:80vh; overflow-y:auto;
 }
-.bottom-nav-item {
-  display:flex; flex-direction:column; align-items:center;
-  font-size:20rpx; color:#999; padding:8rpx 16rpx;
+.form-btns {
+  display:flex; gap:20rpx; margin-top:20rpx;
 }
-.bottom-nav-item.active { color:#4A90D9; font-weight:bold; }
-.bottom-nav-icon {
-  font-size:32rpx; margin-bottom:4rpx;
+.form-btns .btn-primary, .form-btns .btn-secondary {
+  flex:1; margin-top:0;
 }
-/* 页面内容区底部留空，避免被 bottom-nav 遮挡 */
-.with-bottom-nav { padding-bottom:130rpx; }

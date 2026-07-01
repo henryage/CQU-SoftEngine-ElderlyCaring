@@ -33,17 +33,6 @@ App({
     return !!this.globalData.childId
   },
 
-  requireLogin(callback) {
-    if (this.globalData.childId) {
-      callback()
-    } else {
-      wx.showToast({ title: '请先登录', icon: 'none', duration: 1500 })
-      setTimeout(() => {
-        wx.navigateTo({ url: '/pages/login/login' })
-      }, 1500)
-    }
-  },
-
   async silentRefreshToken() {
     if (!this.globalData.refreshToken) return
     try {
@@ -54,12 +43,10 @@ App({
         wx.setStorageSync('token', data.token)
       }
     } catch (e) {
-      // 刷新失败：尝试重新 wx-login
+      // 刷新失败：用保存的登录 ID 重新登录
       try {
-        const codeResp = await new Promise((resolve, reject) => {
-          wx.login({ success: resolve, fail: reject })
-        })
-        const data = await login(codeResp.code, 'child')
+        const loginId = wx.getStorageSync('login_id') || '1'
+        const data = await login(loginId, 'child')
         if (data && data.token) {
           this.globalData.token = data.token
           this.globalData.refreshToken = data.refresh_token
