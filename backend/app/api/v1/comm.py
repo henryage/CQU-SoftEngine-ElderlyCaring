@@ -1,17 +1,18 @@
 """通信路由（子女端 ↔ 老人端）。
 
 接口：
-- POST /comm/text              发送文字留言
-- POST /comm/voice             上传语音消息
+- POST /comm/text              子女→老人 文字留言
+- POST /comm/voice             子女→老人 语音消息
 - POST /comm/greeting/schedule 定时问候配置
-- GET  /comm/history           通信历史
+- GET  /comm/history           子女查历史（子女端）
+- GET  /comm/messages          老人收件箱（老人端）
 """
 from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy import select, func, or_
 
-from app.core.deps import DB, ChildRole
-from app.models.user import UserChildRelation
+from app.core.deps import DB, ChildRole, ElderUser
+from app.models.user import UserChildRelation, ChildUser
 from app.models.interaction import CommunicationLog, GreetingSchedule
 from app.schemas.common import R
 
@@ -144,3 +145,42 @@ async def list_greetings(
     return R.ok([{"greeting_id": g.greeting_id, "content": g.content,
                    "cron_expr": g.cron_expr, "created_at": g.created_at.isoformat() if g.created_at else None}
                   for g in rows])
+
+
+# ── 老人收件箱 ────────────────────────────────────
+
+@router.get("/messages", response_model=R, summary="收件箱（老人端）")
+async def messages(
+    cur: ElderUser, db: DB,
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+):
+    """老人查看所有绑定子女发来的留言。"""
+    total = (await db.execute(
+        select(func.count()).select_from(CommunicationLog).where(
+            CommunicationLog.user_id == cur.ref_id,
+            CommunicationLog.direction == "child_to_user",
+        )
+    )).scalar() or 0
+    rows = (await db.execute(
+        select(CommunicationLog).where(
+            CommunicationLog.user_id == cur.ref_id,
+            CommunicationLog.direction == "child_to_user",
+        ).order_by(CommunicationLog.comm_time.desc())
+        .offset((page - 1) * page_size).limit(page_size)
+    )).scalars().all()
+
+    items = []
+    for c in rows:
+        child_name = None
+        if c.child_id:
+            ch = await db.get(ChildUser, c.child_id)
+            child_name = ch.name if ch else None
+        items.append({
+            "comm_id": c.comm_id, "comm_type": c.comm_type,
+            "content": c.content, "duration_sec": c.duration_sec,
+            "from_name": child_name,
+            "comm_time": c.comm_time.isoformat(),
+        })
+
+    return R.ok({"total": int(total), "page": page, "page_size": page_size, "items": items})
