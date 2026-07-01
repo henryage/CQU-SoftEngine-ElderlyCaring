@@ -171,13 +171,14 @@ async def create_memory(payload: MemoryIn, cur: AnyRole, db: DB):
     db.add(mem)
     await db.flush()
 
-    # 写入 Chroma
-    try:
-        vid = await _add_to_chroma(mem.memory_id, payload.content)
-        mem.vector_id = vid
-        await db.flush()  # 持久化 vector_id
-    except Exception:
-        pass
+    # 写入 Chroma（importance=1 仅存库，不进向量检索）
+    if payload.importance and payload.importance > 1:
+        try:
+            vid = await _add_to_chroma(mem.memory_id, payload.content)
+            mem.vector_id = vid
+            await db.flush()
+        except Exception:
+            pass
 
     await db.refresh(mem)
 
@@ -210,14 +211,15 @@ async def update_memory(memory_id: int, payload: MemoryIn, cur: AnyRole, db: DB)
     mem.importance = payload.importance
     # TODO: source_msg_id 编辑时保持不变，暂不支持修改
 
-    # 更新 Chroma（删旧插新）
+    # 更新 Chroma：importance=1 不写向量
     if old_vid:
         await _delete_from_chroma(old_vid)
-    try:
-        vid = await _add_to_chroma(mem.memory_id, payload.content)
-        mem.vector_id = vid
-    except Exception:
-        pass
+    if payload.importance and payload.importance > 1:
+        try:
+            vid = await _add_to_chroma(mem.memory_id, payload.content)
+            mem.vector_id = vid
+        except Exception:
+            pass
 
     return R.ok(_mem_to_dict(mem), msg="编辑成功")
 
@@ -238,11 +240,25 @@ async def delete_memory(memory_id: int, cur: AnyRole, db: DB):
 
 @router.patch("/{memory_id}/importance", response_model=R, summary="调整重要度")
 async def set_importance(memory_id: int, payload: MemoryImportanceIn, cur: AnyRole, db: DB):
-    """仅子女端/管理端可调。1-5，越大越重要，检索时排在前面。"""
+    """仅子女端/管理端可调。1-5。importance=1 仅存库不进向量，>1 进 Chroma。"""
     mem = await db.get(LongTermMemory, memory_id)
     if mem is None or mem.is_deleted:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "记忆不存在")
+
+    old_imp = mem.importance
     mem.importance = payload.importance
+
+    # 跨阈值更新 Chroma
+    if old_imp <= 1 and payload.importance > 1:
+        try:
+            vid = await _add_to_chroma(mem.memory_id, mem.content)
+            mem.vector_id = vid
+        except Exception:
+            pass
+    elif old_imp > 1 and payload.importance <= 1 and mem.vector_id:
+        await _delete_from_chroma(mem.vector_id)
+        mem.vector_id = None
+
     return R.ok(_mem_to_dict(mem), msg="重要度已更新")
 
 
@@ -315,6 +331,7 @@ async def search_memory(payload: MemorySearchIn, cur: AnyRole, db: DB):
             .where(
                 LongTermMemory.user_id == payload.user_id,
                 LongTermMemory.is_deleted == 0,
+                LongTermMemory.importance > 1,
                 LongTermMemory.content.like(f"%{payload.query}%"),
             )
             .order_by(LongTermMemory.importance.desc())
