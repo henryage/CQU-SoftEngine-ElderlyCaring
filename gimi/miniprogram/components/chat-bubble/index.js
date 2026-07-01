@@ -9,12 +9,14 @@ Component({
     catState: { type: String, value: 'speak' },
     riskTags: { type: Array, value: [] },
     intercepted: { type: Boolean, value: false },
-    messageId: { type: String, value: '' }
+    messageId: { type: String, value: '' },
+    fontSize: { type: String, value: 'normal' }
   },
 
   data: {
     catImageUrl: '',
-    imageUrls: []
+    imageUrls: [],
+    textFontSize: 36
   },
 
   observers: {
@@ -38,6 +40,10 @@ Component({
         return '';
       });
       this.setData({ imageUrls: urls });
+    },
+    'fontSize': function(size) {
+      var map = { 'normal': 36, 'large': 44, 'xlarge': 52 };
+      this.setData({ textFontSize: map[size] || 36 });
     }
   },
 
