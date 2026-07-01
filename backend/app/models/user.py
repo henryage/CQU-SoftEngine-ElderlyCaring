@@ -33,6 +33,9 @@ class User(Base, TimestampMixin):
     # 心跳与在线状态（用于网络断开自动预警）
     last_heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, index=True)
     online_status: Mapped[str] = mapped_column(String(16), default="offline", nullable=False)  # online/offline
+    # 绑定验证码（老人端生成，子女端输入后绑定）
+    bind_code: Mapped[str | None] = mapped_column(String(8), nullable=True, index=True)
+    bind_code_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     wx_account = relationship("WxAccount", lazy="joined")
 

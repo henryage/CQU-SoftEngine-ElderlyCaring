@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 
 
 class BindIn(BaseModel):
-    """绑定老人入参。"""
-    user_id: int = Field(..., description="老人ID", examples=[6])
+    """绑定老人入参——使用验证码替代直接传 user_id。"""
+    code: str = Field(..., description="老人端生成的 6 位绑定验证码", min_length=6, max_length=6, examples=["385721"])
     relation: str = Field(default="子女", description="关系：子女/亲属/医生", examples=["母亲"])
 
 
