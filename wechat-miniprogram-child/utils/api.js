@@ -3,7 +3,7 @@
 // 依据：backend/app/api/v1/ 实际路由
 // ============================
 
-const BASE_URL = 'http://10.128.229.199:8090'
+const BASE_URL = 'http://10.178.3.199:8090'
 
 // ---- Token ----
 function getToken() {

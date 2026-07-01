@@ -18,7 +18,7 @@ Page({
   },
 
   goToBind() {
-    wx.navigateTo({ url: '/subpkg-manage/pages/bind/bind' })
+    app.requireLogin(() => wx.navigateTo({ url: '/subpkg-manage/pages/bind/bind' }))
   },
 
   doSwitchAccount() {

@@ -1,10 +1,10 @@
 {
   "lazyCodeLoading": "requiredComponents",
   "pages": [
-    "pages/login/login",
     "pages/index/index",
     "pages/alert/alert",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/login/login"
   ],
   "subPackages": [
     {
@@ -46,6 +46,7 @@
     "selectedColor": "#4A90D9",
     "borderStyle": "white",
     "backgroundColor": "#ffffff",
+    "fontSize": "18px",
     "list": [
       {
         "pagePath": "pages/index/index",

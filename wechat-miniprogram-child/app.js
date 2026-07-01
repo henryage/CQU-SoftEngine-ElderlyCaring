@@ -23,12 +23,25 @@ App({
   },
 
   checkLogin() {
-    if (!this.globalData.childId) {
-      wx.reLaunch({ url: '/pages/login/login' })
-      return
+    // 静默续 token（已登录）或跳过（未登录）
+    if (this.globalData.childId) {
+      this.silentRefreshToken()
     }
-    // 后台静默续 token
-    this.silentRefreshToken()
+  },
+
+  isLoggedIn() {
+    return !!this.globalData.childId
+  },
+
+  requireLogin(callback) {
+    if (this.globalData.childId) {
+      callback()
+    } else {
+      wx.showToast({ title: '请先登录', icon: 'none', duration: 1500 })
+      setTimeout(() => {
+        wx.navigateTo({ url: '/pages/login/login' })
+      }, 1500)
+    }
   },
 
   async silentRefreshToken() {
