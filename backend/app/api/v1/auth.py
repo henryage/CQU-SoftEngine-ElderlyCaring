@@ -8,7 +8,7 @@
 """
 import logging
 from datetime import datetime, timedelta, timezone
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy import select
 from app.core.config import settings
 from app.core.deps import DB, AnyRole, ElderUser
@@ -181,6 +181,21 @@ async def generate_bind_code(cur: ElderUser, db: DB):
         "expires_in_seconds": 300,
         "user_id": user.user_id,
     }, msg=f"验证码 {code}，5 分钟内有效")
+
+
+@router.put(
+    "/nickname",
+    response_model=R,
+    summary="修改昵称（老人端）",
+    description="老人修改自己的昵称，子女端可同步看到。",
+)
+async def update_nickname(nickname: str = Query(..., min_length=1, max_length=64), cur: ElderUser = None, db: DB = None):
+    user = await db.get(User, cur.ref_id)
+    if user is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "用户不存在")
+    old = user.nickname
+    user.nickname = nickname
+    return R.ok({"user_id": user.user_id, "old": old, "new": nickname}, msg="昵称已更新")
 
 
 @router.post(
