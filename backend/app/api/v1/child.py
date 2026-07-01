@@ -51,26 +51,41 @@ async def _check_bind(db, child_id: int, user_id: int):
 
 # ── 绑定 ──────────────────────────────────────────
 
-@router.post("/bind", response_model=R, summary="绑定老人")
+@router.post("/bind", response_model=R, summary="绑定老人（验证码）")
 async def bind(payload: BindIn, cur: ChildRole, db: DB):
-    """子女绑定一位老人。已有绑定关系时返回 409。"""
+    """子女用老人出示的 6 位验证码绑定。验证码 5 分钟有效。"""
     child_id = _resolve_child_id(cur)
+
+    # 查验证码对应的老人
+    user = (await db.execute(
+        select(User).where(
+            User.bind_code == payload.code,
+            User.bind_code_expires_at > datetime.now(timezone.utc),
+        )
+    )).scalar_one_or_none()
+
+    if user is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "验证码无效或已过期")
+
     existing = (await db.execute(
         select(UserChildRelation).where(
             UserChildRelation.child_id == child_id,
-            UserChildRelation.user_id == payload.user_id,
+            UserChildRelation.user_id == user.user_id,
         )
     )).scalar_one_or_none()
     if existing is not None:
         raise HTTPException(status.HTTP_409_CONFLICT, "已绑定该老人")
 
+    # 绑定 + 清验证码（一次性使用）
     rel = UserChildRelation(
         child_id=child_id,
-        user_id=payload.user_id,
+        user_id=user.user_id,
         relation=payload.relation,
     )
+    user.bind_code = None
+    user.bind_code_expires_at = None
     db.add(rel)
-    return R.ok({"user_id": payload.user_id, "relation": payload.relation}, msg="绑定成功")
+    return R.ok({"user_id": user.user_id, "nickname": user.nickname, "relation": payload.relation}, msg="绑定成功")
 
 
 @router.delete("/unbind/{user_id}", response_model=R, summary="解绑老人")

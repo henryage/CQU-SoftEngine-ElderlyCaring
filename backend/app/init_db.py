@@ -5,6 +5,7 @@
 """
 import asyncio
 import logging
+from sqlalchemy import text
 from app.core.config import settings
 from app.db.base import Base
 from app.db.session import engine
@@ -76,6 +77,21 @@ async def main():
     logger.info("=== 初始化数据库 ===")
     logger.info("DSN: %s", settings.mysql_dsn.replace(settings.mysql_password or "", "***") if settings.mysql_password else settings.mysql_dsn)
     await create_all_tables()
+    # 迁移：添加 bind_code 列（user 表已有数据时 ALTER）
+    async with engine.begin() as conn:
+        try:
+            await conn.execute(text("ALTER TABLE user ADD COLUMN bind_code VARCHAR(8) NULL"))
+        except Exception:
+            pass
+        try:
+            await conn.execute(text("ALTER TABLE user ADD COLUMN bind_code_expires_at DATETIME NULL"))
+        except Exception:
+            pass
+        try:
+            await conn.execute(text("CREATE INDEX idx_user_bind_code ON user(bind_code)"))
+        except Exception:
+            pass
+    logger.info("✓ 迁移已执行（bind_code 列）")
     if settings.is_dev:
         await seed_dev_data()
         logger.info("✓ dev 种子数据已灌入")

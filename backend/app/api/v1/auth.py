@@ -7,8 +7,8 @@
 鉴权方式：除 wx-login/refresh/admin-login/dev-create-admin 外，均需 `Authorization: Bearer <token>`
 """
 import logging
-from datetime import datetime, timezone
-from fastapi import APIRouter, HTTPException, status
+from datetime import datetime, timedelta, timezone
+from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy import select
 from app.core.config import settings
 from app.core.deps import DB, AnyRole, ElderUser
@@ -155,6 +155,47 @@ async def my_info(cur: AnyRole):
         "is_elder": cur.is_elder,
         "is_admin": cur.is_admin,
     })
+
+
+@router.post(
+    "/generate-bind-code",
+    response_model=R,
+    summary="生成绑定验证码（老人端）",
+    description="""
+老人端调用，生成 6 位数字验证码，5 分钟有效。
+子女端凭此验证码进行绑定（替代直接输入 user_id）。
+""".strip(),
+)
+async def generate_bind_code(cur: ElderUser, db: DB):
+    import random
+    user = await db.get(User, cur.ref_id)
+    if user is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "用户不存在")
+
+    code = str(random.randint(100000, 999999))
+    user.bind_code = code
+    user.bind_code_expires_at = datetime.now(timezone.utc) + timedelta(minutes=5)
+
+    return R.ok({
+        "code": code,
+        "expires_in_seconds": 300,
+        "user_id": user.user_id,
+    }, msg=f"验证码 {code}，5 分钟内有效")
+
+
+@router.put(
+    "/nickname",
+    response_model=R,
+    summary="修改昵称（老人端）",
+    description="老人修改自己的昵称，子女端可同步看到。",
+)
+async def update_nickname(nickname: str = Query(..., min_length=1, max_length=64), cur: ElderUser = None, db: DB = None):
+    user = await db.get(User, cur.ref_id)
+    if user is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "用户不存在")
+    old = user.nickname
+    user.nickname = nickname
+    return R.ok({"user_id": user.user_id, "old": old, "new": nickname}, msg="昵称已更新")
 
 
 @router.post(
