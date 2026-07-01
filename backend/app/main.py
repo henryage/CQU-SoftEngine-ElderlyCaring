@@ -106,6 +106,7 @@ app = FastAPI(
         {"name": "reminder", "description": "用药提醒：老人端查看、子女端配置（后续扩展）"},
         {"name": "child", "description": "子女端：绑定老人、健康看板、问答下钻、适老化配置下发"},
         {"name": "comm", "description": "通信：子女→老人留言（后续扩展语音/问候）"},
+        {"name": "admin", "description": "管理端：用户/子女/审计日志/订阅模板管理"},
     ],
     lifespan=lifespan,
 )
