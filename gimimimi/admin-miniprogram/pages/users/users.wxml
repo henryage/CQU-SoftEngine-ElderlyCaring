@@ -1,0 +1,49 @@
+<!-- admin-miniprogram/pages/users/users.wxml -->
+<view class="stat-row">
+  <view class="stat-card">
+    <view class="num blue">{{userTotal}}</view>
+    <view class="label">老人用户</view>
+  </view>
+  <view class="stat-card">
+    <view class="num green">{{childrenTotal}}</view>
+    <view class="label">子女账号</view>
+  </view>
+</view>
+
+<view class="search-bar">
+  <text class="icon">🔍</text>
+  <input placeholder="搜索姓名" value="{{keyword}}" bindinput="onSearchInput" confirm-type="search" />
+</view>
+
+<view class="section-title">全部用户</view>
+
+<block wx:if="{{userList.length > 0}}">
+  <view class="user-card" wx:for="{{userList}}" wx:key="user_id">
+    <view class="avatar" style="background: {{item.avatarColor}};">{{item.initial}}</view>
+    <view class="info">
+      <view class="name-row">
+        <view class="name">{{item.nickname}}</view>
+        <view class="tag {{item.status === 1 ? 'tag-active' : 'tag-offline'}}">
+          {{item.status === 1 ? '活跃' : '禁用'}}
+        </view>
+        <view class="tag {{item.online_status === 'online' ? 'tag-online' : 'tag-offline'}}">
+          {{item.online_status === 'online' ? '在线' : '离线'}}
+        </view>
+      </view>
+      <view class="detail">{{item.phoneMasked || item.phone}} · {{item.created_at}}注册</view>
+    </view>
+  </view>
+</block>
+
+<block wx:else>
+  <view class="empty-state">
+    <view class="icon">👥</view>
+    <view class="text">暂无用户数据</view>
+  </view>
+</block>
+
+<view wx:if="{{hasMore && userList.length > 0}}" style="text-align:center;padding:20rpx;color:#999;font-size:24rpx;">
+  上拉加载更多
+</view>
+
+<view class="safe-bottom"></view>
