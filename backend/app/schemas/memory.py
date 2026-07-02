@@ -14,7 +14,7 @@ class MemoryIn(BaseModel):
     )
     content: str = Field(..., max_length=5000, description="记忆内容", examples=["爸爸对青霉素过敏，不能使用。2025年确诊。"])
     summary: str | None = Field(default=None, max_length=255, description="摘要（不填自动截取前100字）", examples=["爸爸对青霉素过敏"])
-    importance: int = Field(default=3, ge=1, le=5, description="重要度 1-5，5最重要", examples=[5])
+    importance: int = Field(default=3, ge=0, le=5, description="重要度 0-5，0=已失效，5最重要", examples=[5])
     # TODO: source_msg_id 暂不暴露。后续大模型自动从对话抽取记忆时补充此字段
 
 
@@ -27,7 +27,7 @@ class MemoryOut(BaseModel):
     content: str = Field(..., description="内容")
     summary: str | None = Field(None, description="摘要")
     vector_id: str | None = Field(None, description="Chroma 向量 ID")
-    importance: int = Field(..., description="重要度 1-5")
+    importance: int = Field(..., description="重要度 0-5")
     source_msg_id: int | None = Field(None, description="来源消息ID")
     is_deleted: bool = Field(default=False, description="是否已删除")
     created_at: str | None = Field(None, description="创建时间", examples=["2026-06-29T10:00:00Z"])
@@ -36,7 +36,7 @@ class MemoryOut(BaseModel):
 
 class MemoryImportanceIn(BaseModel):
     """重要度调整入参。"""
-    importance: int = Field(..., ge=1, le=5, description="重要度 1-5", examples=[5])
+    importance: int = Field(..., ge=0, le=5, description="重要度 0-5，0=已失效", examples=[5])
 
 
 class MemorySearchIn(BaseModel):
