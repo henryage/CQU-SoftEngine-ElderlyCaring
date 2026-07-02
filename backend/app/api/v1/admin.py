@@ -69,6 +69,44 @@ async def list_children(
     })
 
 
+# ── 绑定关系 ──────────────────────────────────────
+
+@router.get("/relations", response_model=R, summary="绑定关系查询")
+async def relations(
+    cur: AdminRole, db: DB,
+    user_id: int = Query(None, description="按老人ID查 → 返回绑定子女"),
+    child_id: int = Query(None, description="按子女ID查 → 返回绑定老人"),
+):
+    if user_id is None and child_id is None:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "请传 user_id 或 child_id")
+
+    conds = []
+    if user_id:
+        conds.append(UserChildRelation.user_id == user_id)
+    if child_id:
+        conds.append(UserChildRelation.child_id == child_id)
+
+    rows = (await db.execute(
+        select(UserChildRelation, User, ChildUser)
+        .join(User, UserChildRelation.user_id == User.user_id)
+        .join(ChildUser, UserChildRelation.child_id == ChildUser.child_id)
+        .where(*conds)
+    )).all()
+
+    results = []
+    for rel, u, ch in rows:
+        results.append({
+            "relation_id": rel.relation_id,
+            "elderly": {"user_id": u.user_id, "nickname": u.nickname, "online_status": u.online_status},
+            "child": {"child_id": ch.child_id, "name": ch.name, "phone": ch.phone},
+            "relation": rel.relation,
+            "is_primary": bool(rel.is_primary),
+            "created_at": rel.created_at.isoformat() if rel.created_at else None,
+        })
+
+    return R.ok({"count": len(results), "items": results})
+
+
 # ── 审计日志 ──────────────────────────────────────
 
 @router.get("/audit", response_model=R, summary="审计日志查询")
