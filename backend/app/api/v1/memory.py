@@ -157,11 +157,14 @@ async def create_memory(payload: MemoryIn, cur: AnyRole, db: DB):
     if not cur.is_child and not cur.is_admin:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "仅子女端/管理端可手动新增记忆")
 
+    # 自动推断来源
+    source = payload.source if payload.source != "admin" else ("child" if cur.is_child else "admin")
+
     summary = payload.summary or payload.content[:100]
     mem = LongTermMemory(
         user_id=payload.user_id,
         memory_type=payload.memory_type,
-        source=payload.source,
+        source=source,
         content=payload.content,
         summary=summary,
         importance=payload.importance,
@@ -205,7 +208,7 @@ async def update_memory(memory_id: int, payload: MemoryIn, cur: AnyRole, db: DB)
     old_vid = mem.vector_id
     mem.user_id = payload.user_id
     mem.memory_type = payload.memory_type
-    mem.source = payload.source
+    mem.source = payload.source if payload.source != "admin" else ("child" if cur.is_child else "admin")
     mem.content = payload.content
     mem.summary = payload.summary or payload.content[:100]
     mem.importance = payload.importance
