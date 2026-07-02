@@ -1,0 +1,2 @@
+/* admin-miniprogram/pages/login/login.wxss */
+@import '/app.wxss';
