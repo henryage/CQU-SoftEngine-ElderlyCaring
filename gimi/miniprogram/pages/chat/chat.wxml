@@ -5,10 +5,7 @@
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
     <view class="nav-content">
       <view class="nav-back" bindtap="onGoBack">‹ 返回</view>
-      <view class="nav-center">
-        <view class="nav-title">聊天</view>
-        <view class="nav-user-id">{{userId}}</view>
-      </view>
+      <view class="nav-title">聊天</view>
       <view class="nav-placeholder"></view>
     </view>
   </view>
@@ -26,7 +23,6 @@
           cat-state="{{item.catState}}"
           risk-tags="{{item.riskTags}}" intercepted="{{item.intercepted}}"
           message-id="{{item.id}}"
-          font-size="{{fontSize}}"
           bind:bubbletap="onBubbleTap"
           bind:retry="onRetryMessage"
         ></chat-bubble>

@@ -1,9 +1,9 @@
 // ============================
 // 子女端 API 封装
-// 依据：backend/app/api/v1/ 实际路由
+// 对齐 backend/app/api/v1/ 所有已实现接口
 // ============================
 
-const BASE_URL = 'http://10.128.229.199:8090'
+const BASE_URL = 'http://10.178.3.199:8090'
 
 // ---- Token ----
 function getToken() {
@@ -35,7 +35,8 @@ function request(options) {
         const body = res.data || {}
         const code = body.code !== undefined ? body.code : res.statusCode
 
-        if (res.statusCode === 200 && code === 0) {
+        // 支持 200/201 等成功状态码
+        if (res.statusCode >= 200 && res.statusCode < 300 && code === 0) {
           resolve(body.data)
           return
         }
@@ -89,8 +90,24 @@ function post(url, data = {}) {
   return request({ url, method: 'POST', data })
 }
 
+function postQs(url, params = {}) {
+  const keys = Object.keys(params).filter(k => params[k] !== undefined && params[k] !== null && params[k] !== '')
+  if (keys.length) {
+    url += '?' + keys.map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`).join('&')
+  }
+  return request({ url, method: 'POST' })
+}
+
 function put(url, data = {}) {
   return request({ url, method: 'PUT', data })
+}
+
+function putQs(url, params = {}) {
+  const keys = Object.keys(params).filter(k => params[k] !== undefined && params[k] !== null && params[k] !== '')
+  if (keys.length) {
+    url += '?' + keys.map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`).join('&')
+  }
+  return request({ url, method: 'PUT' })
 }
 
 function del(url) {
@@ -102,39 +119,60 @@ function patch(url, data = {}) {
 }
 
 // ============ 认证 auth.py ============
-// POST /api/v1/auth/wx-login       老人/子女共用
-// POST /api/v1/auth/refresh        token 刷新
-// POST /api/v1/auth/logout         登出
-// POST /api/v1/auth/bind-phone     子女绑定手机号
-// POST /api/v1/auth/heartbeat      老人端心跳（子女不可用）
-// POST /api/v1/auth/subscribe/grant 订阅授权上报
-// POST /api/v1/auth/admin/login    管理员登录
-// GET  /api/v1/auth/dev/create-admin 开发创建管理员
-
+// POST /api/v1/auth/wx-login
 function login(code, userType = 'child') {
   return post('/api/v1/auth/wx-login', { code, user_type: userType })
 }
 
+// POST /api/v1/auth/refresh
 function refreshToken(rt) {
   return post('/api/v1/auth/refresh', { refresh_token: rt })
 }
 
+// POST /api/v1/auth/logout
 function logout() {
   return post('/api/v1/auth/logout')
 }
 
+// POST /api/v1/auth/bind-phone
 function bindPhone(phone, name, relation) {
   return post('/api/v1/auth/bind-phone', { phone, name, relation })
 }
 
+// GET /api/v1/auth/me
+function getMyInfo() {
+  return get('/api/v1/auth/me')
+}
+
+// POST /api/v1/auth/subscribe/grant
+function grantSubscribe(templateId, grantStatus) {
+  return post('/api/v1/auth/subscribe/grant', { template_id: templateId, grant_status: grantStatus })
+}
+
+// ============ 媒体 media.py ============
+// POST /api/v1/media/upload/image   （需要用 wx.uploadFile，这里提供 URL 供参考）
+function uploadImageUrl() {
+  return '/api/v1/media/upload/image'
+}
+
+// POST /api/v1/media/image/enhance
+function enhanceImage(url, brightness = 1.3) {
+  return post('/api/v1/media/image/enhance', { url, brightness })
+}
+
+// POST /api/v1/media/upload/voice
+function uploadVoiceUrl() {
+  return '/api/v1/media/upload/voice'
+}
+
 // ============ 记忆 memory.py ============
-// GET    /api/v1/memory                       列表（分页/筛选）
-// POST   /api/v1/memory                       新增（需 user_id）
-// GET    /api/v1/memory/{memory_id}            详情
-// PUT    /api/v1/memory/{memory_id}            编辑
-// DELETE /api/v1/memory/{memory_id}            删除（软删）
-// PATCH  /api/v1/memory/{memory_id}/importance 调整重要度
-// POST   /api/v1/memory/search                语义检索
+// GET    /api/v1/memory
+// POST   /api/v1/memory
+// GET    /api/v1/memory/{memory_id}
+// PUT    /api/v1/memory/{memory_id}
+// DELETE /api/v1/memory/{memory_id}
+// PATCH  /api/v1/memory/{memory_id}/importance
+// POST   /api/v1/memory/search
 
 function listMemory(params = {}) {
   return get('/api/v1/memory', params)
@@ -165,8 +203,8 @@ function searchMemory(data) {
 }
 
 // ============ 问答 qa.py ============
-// GET /api/v1/qa/history          历史问答（子女需传 user_id，且需已绑定）
-// GET /api/v1/qa/history/{msg_id} 单条详情
+// GET /api/v1/qa/history
+// GET /api/v1/qa/history/{msg_id}
 
 function qaHistory(params = {}) {
   return get('/api/v1/qa/history', params)
@@ -174,6 +212,102 @@ function qaHistory(params = {}) {
 
 function qaDetail(msgId) {
   return get(`/api/v1/qa/history/${msgId}`)
+}
+
+// ============ 用药提醒 reminder.py ============
+// GET    /api/v1/reminder/medication/list  子女端查看老人用药列表
+// POST   /api/v1/reminder/medication       新增（Query参数）
+// PUT    /api/v1/reminder/medication/{id}  修改（Query参数）
+// DELETE /api/v1/reminder/medication/{id}  删除
+
+function listMedications(userId) {
+  return get('/api/v1/reminder/medication/list', { user_id: userId })
+}
+
+function createMedication(drugName, remindTime, userId, dosage) {
+  return postQs('/api/v1/reminder/medication', {
+    drug_name: drugName,
+    remind_time: remindTime,
+    user_id: userId,
+    dosage: dosage
+  })
+}
+
+function updateMedication(reminderId, params = {}) {
+  return putQs(`/api/v1/reminder/medication/${reminderId}`, params)
+}
+
+function deleteMedication(reminderId) {
+  return del(`/api/v1/reminder/medication/${reminderId}`)
+}
+
+// ============ 子女端 child.py ============
+// POST   /api/v1/child/bind
+// DELETE /api/v1/child/unbind/{user_id}
+// GET    /api/v1/child/binded-users
+// GET    /api/v1/child/dashboard/{user_id}
+// GET    /api/v1/child/messages/{user_id}
+// GET    /api/v1/child/settings/{user_id}
+// PUT    /api/v1/child/settings/{user_id}
+// GET    /api/v1/child/settings/{user_id}/changes
+
+function bindElderly(code, relation = '子女') {
+  return post('/api/v1/child/bind', { code, relation })
+}
+
+function unbindElderly(userId) {
+  return del(`/api/v1/child/unbind/${userId}`)
+}
+
+function getBindedUsers() {
+  return get('/api/v1/child/binded-users')
+}
+
+function getDashboard(userId) {
+  return get(`/api/v1/child/dashboard/${userId}`)
+}
+
+function getChildMessages(userId, params = {}) {
+  return get(`/api/v1/child/messages/${userId}`, params)
+}
+
+function getChildSettings(userId) {
+  return get(`/api/v1/child/settings/${userId}`)
+}
+
+function updateChildSettings(userId, data) {
+  return put(`/api/v1/child/settings/${userId}`, data)
+}
+
+function getSettingsChanges(userId) {
+  return get(`/api/v1/child/settings/${userId}/changes`)
+}
+
+// ============ 通信 comm.py ============
+// POST   /api/v1/comm/text
+// POST   /api/v1/comm/voice
+// GET    /api/v1/comm/history
+// POST   /api/v1/comm/greeting/schedule
+// GET    /api/v1/comm/greeting/schedule
+
+function commText(userId, content) {
+  return postQs('/api/v1/comm/text', { user_id: userId, content })
+}
+
+function commVoice(userId, durationSec, content) {
+  return postQs('/api/v1/comm/voice', { user_id: userId, duration_sec: durationSec, content })
+}
+
+function commHistory(userId, page = 1, pageSize = 20) {
+  return get('/api/v1/comm/history', { user_id: userId, page, page_size: pageSize })
+}
+
+function createGreeting(userId, content, cronExpr, greetingId) {
+  return postQs('/api/v1/comm/greeting/schedule', { user_id: userId, content, cron_expr: cronExpr, greeting_id: greetingId })
+}
+
+function listGreetings(userId) {
+  return get('/api/v1/comm/greeting/schedule', { user_id: userId })
 }
 
 // ============ 系统 ============
@@ -199,11 +333,20 @@ module.exports = {
   BASE_URL,
   request, get, post, put, del, patch,
   // auth
-  login, refreshToken, logout, bindPhone,
+  login, refreshToken, logout, bindPhone, getMyInfo, grantSubscribe,
+  // media
+  uploadImageUrl, enhanceImage, uploadVoiceUrl,
   // memory
   listMemory, createMemory, getMemory, updateMemory, deleteMemory, setImportance, searchMemory,
   // qa
   qaHistory, qaDetail,
+  // reminder
+  listMedications, createMedication, updateMedication, deleteMedication,
+  // child
+  bindElderly, unbindElderly, getBindedUsers, getDashboard, getChildMessages,
+  getChildSettings, updateChildSettings, getSettingsChanges,
+  // comm
+  commText, commVoice, commHistory, createGreeting, listGreetings,
   // system
   healthCheck
 }

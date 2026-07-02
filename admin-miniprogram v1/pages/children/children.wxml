@@ -1,0 +1,32 @@
+<!-- admin-miniprogram/pages/children/children.wxml -->
+<view class="search-bar">
+  <text class="icon">🔍</text>
+  <input placeholder="搜索子女昵称或手机号" value="{{keyword}}" bindinput="onSearchInput" confirm-type="search" />
+</view>
+
+<view class="section-title">全部子女</view>
+
+<block wx:if="{{childrenList.length > 0}}">
+  <view class="user-card" wx:for="{{childrenList}}" wx:key="child_id">
+    <view class="avatar" style="background: {{item.avatarColor}};">{{item.initial}}</view>
+    <view class="info">
+      <view class="name-row">
+        <view class="name">{{item.name}}</view>
+      </view>
+      <view class="detail">{{item.phoneMasked || item.phone}} · {{item.created_at}}注册</view>
+    </view>
+  </view>
+</block>
+
+<block wx:else>
+  <view class="empty-state">
+    <view class="icon">👨‍👩‍👧</view>
+    <view class="text">暂无子女账号</view>
+  </view>
+</block>
+
+<view wx:if="{{hasMore && childrenList.length > 0}}" style="text-align:center;padding:20rpx;color:#999;font-size:24rpx;">
+  上拉加载更多
+</view>
+
+<view class="safe-bottom"></view>

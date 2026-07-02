@@ -1,26 +1,46 @@
-<view class="container with-bottom-nav">
+<view class="container">
   <view class="page-header">
     <view class="page-header-title">问答记录</view>
     <view class="page-header-sub">查看老人的咨询轨迹</view>
   </view>
 
-  <view class="card text-center">
-    <view class="text-sm text-gray mb-20">后端 child 路由开发中，功能即将上线</view>
+  <!-- 老人选择器 -->
+  <view class="card" wx:if="{{bindedUsers.length > 0}}">
+    <view class="text-sm text-gray mb-10">选择老人</view>
+    <picker mode="selector" range="{{bindedUsers}}" range-key="nickname" bindchange="onElderSelect">
+      <view class="elder-picker">
+        <text wx:if="{{selectedNickname}}">{{selectedNickname}} (ID: {{selectedUserId}})</text>
+        <text wx:else class="text-gray">请选择已绑定的老人</text>
+        <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+  <view class="card text-center" wx:elif="{{bindedUsers.length === 0}}">
+    <view class="text-sm text-gray">暂无绑定老人，请先到「绑定」页绑定</view>
   </view>
 
-  <!-- 底部导航 -->
-  <view class="bottom-nav">
-    <view class="bottom-nav-item" bindtap="goBack">
-      <view class="bottom-nav-icon">&#9750;</view>
-      <view>首页</view>
-    </view>
-    <view class="bottom-nav-item active">
-      <view class="bottom-nav-icon">&#9997;</view>
-      <view>问答</view>
-    </view>
-    <view class="bottom-nav-item" bindtap="goToMessage">
-      <view class="bottom-nav-icon">&#9993;</view>
-      <view>通信</view>
+  <!-- 搜索 -->
+  <view class="card" wx:if="{{selectedUserId}}">
+    <view class="input-row" style="display:flex;gap:16rpx;">
+      <input class="bind-input" style="flex:1;" placeholder="搜索关键词" value="{{keyword}}" bindinput="onKeywordInput" />
+      <view class="btn-primary" style="padding:16rpx 32rpx;font-size:28rpx;" bindtap="onSearch">搜索</view>
     </view>
   </view>
+
+  <!-- 记录列表 -->
+  <view class="card" wx:if="{{records.length > 0}}">
+    <view class="text-lg text-bold mb-20">问答记录 (共{{total}}条)</view>
+    <view class="qa-mini" wx:for="{{records}}" wx:key="msg_id" style="border-bottom:1rpx solid #eee;padding-bottom:16rpx;margin-bottom:16rpx;">
+      <view class="text-sm text-bold">Q: {{item.question || '[图片/语音]'}}</view>
+      <view class="text-sm text-gray">A: {{item.answer}}</view>
+      <view class="text-xs text-gray">{{item.created_at}}</view>
+    </view>
+    <view wx:if="{{hasMore}}" class="text-center" bindtap="loadMore">
+      <text class="text-sm" style="color:#4A90D9;">加载更多</text>
+    </view>
+  </view>
+  <view class="card text-center" wx:elif="{{selectedUserId && records.length === 0 && !loading}}">
+    <view class="text-sm text-gray">暂无问答记录</view>
+  </view>
+
 </view>

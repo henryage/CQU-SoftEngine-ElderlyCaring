@@ -1,0 +1,312 @@
+/* admin-miniprogram/app.wxss */
+
+page {
+  --color-primary: #1a73e8;
+  --color-success: #34a853;
+  --color-warning: #f9ab00;
+  --color-danger: #ea4335;
+  --color-bg: #f5f7fa;
+  --color-card: #ffffff;
+  --color-text: #1a1a2e;
+  --color-text-secondary: #999999;
+  --color-border: #eeeeee;
+  --radius-card: 12rpx;
+  --radius-button: 12rpx;
+  --radius-search: 10rpx;
+  --font-h1: 36rpx;
+  --font-h2: 34rpx;
+  --font-body: 28rpx;
+  --font-caption: 24rpx;
+  --font-small: 22rpx;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  background-color: var(--color-bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: var(--font-body);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: var(--shadow-card);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--color-card);
+  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-search);
+  padding: 16rpx 24rpx;
+  margin: 16rpx 24rpx;
+  font-size: var(--font-body);
+  color: var(--color-text-secondary);
+}
+
+.search-bar .icon {
+  margin-right: 12rpx;
+  font-size: var(--font-body);
+}
+
+.search-bar input {
+  flex: 1;
+  font-size: var(--font-body);
+  color: var(--color-text);
+}
+
+.stat-row {
+  display: flex;
+  gap: 16rpx;
+  padding: 16rpx 24rpx;
+}
+
+.stat-card {
+  flex: 1;
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  padding: 28rpx 24rpx;
+  box-shadow: var(--shadow-card);
+}
+
+.stat-card .num {
+  font-size: 48rpx;
+  font-weight: 700;
+}
+
+.stat-card .num.blue { color: var(--color-primary); }
+.stat-card .num.green { color: var(--color-success); }
+
+.stat-card .label {
+  font-size: var(--font-caption);
+  color: var(--color-text-secondary);
+  margin-top: 8rpx;
+}
+
+.section-title {
+  font-size: var(--font-caption);
+  color: var(--color-text-secondary);
+  padding: 16rpx 24rpx 8rpx;
+  font-weight: 600;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  padding: 24rpx;
+  margin: 0 24rpx 16rpx;
+  box-shadow: var(--shadow-card);
+}
+
+.user-card .avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--color-primary);
+  flex-shrink: 0;
+  margin-right: 20rpx;
+}
+
+.user-card .info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-card .name-row {
+  display: flex;
+  align-items: center;
+}
+
+.user-card .name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.user-card .detail {
+  font-size: var(--font-caption);
+  color: var(--color-text-secondary);
+  margin-top: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 4rpx;
+  font-size: var(--font-small);
+  font-weight: 500;
+  margin-left: 12rpx;
+}
+
+.tag-online { background: #e6f4ea; color: var(--color-success); }
+.tag-offline { background: #f1f3f4; color: var(--color-text-secondary); }
+.tag-active { background: #e8f0fe; color: var(--color-primary); }
+
+.filter-row {
+  display: flex;
+  gap: 16rpx;
+  padding: 12rpx 24rpx;
+}
+
+.filter-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-card);
+  border: 1px solid #e0e0e0;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  font-size: var(--font-body);
+  color: var(--color-text-secondary);
+}
+
+.filter-btn .arrow {
+  margin-left: 8rpx;
+  font-size: var(--font-caption);
+}
+
+.audit-item {
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  padding: 24rpx;
+  margin: 0 24rpx 12rpx;
+  box-shadow: var(--shadow-card);
+}
+
+.audit-item .time {
+  font-size: var(--font-caption);
+  color: var(--color-text-secondary);
+  margin-bottom: 8rpx;
+}
+
+.audit-item .action {
+  font-size: var(--font-body);
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.audit-item .operator {
+  font-size: var(--font-caption);
+  color: var(--color-text-secondary);
+  margin-top: 6rpx;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--radius-button);
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  margin: 24rpx;
+  border: none;
+}
+
+.btn-export {
+  position: fixed;
+  bottom: 0;
+  left: 24rpx;
+  right: 24rpx;
+  background: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--radius-button);
+  font-size: 30rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+  color: var(--color-text-secondary);
+}
+
+.empty-state .icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.3;
+}
+
+.empty-state .text {
+  font-size: var(--font-body);
+}
+
+.safe-bottom {
+  height: constant(safe-area-inset-bottom);
+  height: env(safe-area-inset-bottom);
+}
+
+.login-page {
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 200rpx;
+}
+
+.login-logo {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  margin-bottom: 40rpx;
+}
+
+.login-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 12rpx;
+}
+
+.login-subtitle {
+  font-size: var(--font-body);
+  color: var(--color-text-secondary);
+  margin-bottom: 80rpx;
+}
+
+.login-btn {
+  width: 80%;
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--radius-button);
+  font-size: 32rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.login-tip {
+  font-size: var(--font-small);
+  color: var(--color-text-secondary);
+  margin-top: 24rpx;
+}

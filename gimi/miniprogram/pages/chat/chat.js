@@ -1,7 +1,6 @@
 var request = require('../../utils/request.js').request;
 var upload = require('../../utils/upload.js');
 var speech = require('../../utils/speech.js');
-var storage = require('../../utils/storage.js');
 
 var RecordState = { IDLE: 'idle', RECORDING: 'recording', UPLOADING: 'uploading', THINKING: 'thinking' };
 var CatState = { LISTEN: 'listen', THINK: 'think', SPEAK: 'speak' };
@@ -23,23 +22,17 @@ Page({
     navBarHeight: 88,
     bottomBarHeight: 300,
     safeAreaBottom: 0,
-    sessionId: null,
-    userId: '',
-    fontSize: 'normal'
+    sessionId: null
   },
 
   onLoad: function() {
     var sys = wx.getSystemInfoSync();
     var safeBottom = sys.safeArea ? (sys.screenHeight - sys.safeArea.bottom) : 0;
-    var app = getApp();
-    var refId = app.globalData.refId;
     this.setData({
       statusBarHeight: sys.statusBarHeight || 20,
       navBarHeight: (sys.statusBarHeight || 20) + 44,
       safeAreaBottom: safeBottom,
-      bottomBarHeight: 220 + safeBottom,
-      userId: refId ? '老人id' + refId : '',
-      fontSize: storage.get('fontSize', 'normal')
+      bottomBarHeight: 220 + safeBottom
     });
     this.recorderManager = null;
     this.cameraContext = null;
@@ -234,7 +227,6 @@ Page({
     request({
       url: '/api/v1/qa/ask',
       method: 'POST',
-      timeout: mediaUrl ? 180000 : 30000,
       data: {
         input_type: inputType,
         text: asrText || '',

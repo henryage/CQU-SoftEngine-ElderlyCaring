@@ -1,35 +1,21 @@
 <view class="container">
   <view class="login-wrapper">
-    <!-- Logo 区域 -->
     <view class="login-header">
-      <view class="login-avatar">孝</view>
+      <view class="login-avatar"><text>孝</text></view>
       <view class="login-title">孝心守护</view>
       <view class="login-sub">子女端</view>
     </view>
 
-    <!-- 输入区域 -->
-    <view class="card" style="width:100%;box-sizing:border-box;">
-      <view class="text-lg text-bold mb-10">登录</view>
-      <view class="text-sm text-gray mb-30">请输入您的子女 ID（child_user.child_id）</view>
-
-      <view class="input-row mb-30">
-        <view class="text-sm text-gray mb-10">子女 ID</view>
-        <input class="bind-input" style="height:80rpx;font-size:32rpx;border-color:#4A90D9;" type="number" placeholder="请输入 child_id" value="{{childIdInput}}" bindinput="onIdInput" bindconfirm="doLogin" focus="{{true}}" />
-        <view class="text-sm text-gray" style="font-size:20rpx;margin-top:8rpx;">
-          对应数据库 child_user 表主键
-        </view>
-      </view>
-
-      <view class="btn-primary {{loading ? 'btn-disabled' : ''}}" style="width:100%;box-sizing:border-box;" bindtap="doLogin">
-        {{loading ? '登录中...' : '登录'}}
-      </view>
-
-      <view wx:if="{{error}}" class="text-sm text-danger text-center mt-20">{{error}}</view>
+    <view class="input-row" style="width:100%">
+      <view class="text-sm text-gray mb-10">子女ID</view>
+      <input class="bind-input" type="text" placeholder="请输入子女ID" value="{{childId}}" bindinput="onIdInput" />
     </view>
 
-    <!-- 提示 -->
-    <view class="text-sm text-gray text-center" style="margin-top:40rpx;">
-      如无账号请联系管理员创建
-    </view>
+    <button class="login-btn" bindtap="doLogin" loading="{{loading}}" disabled="{{loading}}">
+      {{loading ? '登录中...' : '登录'}}
+    </button>
+
+    <view wx:if="{{error}}" class="text-sm text-danger text-center" style="margin-top:24rpx;">{{error}}</view>
+    <view class="text-xs text-gray text-center" style="margin-top:60rpx;">首次登录自动创建账号</view>
   </view>
 </view>

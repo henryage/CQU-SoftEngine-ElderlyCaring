@@ -1,10 +1,10 @@
 {
   "lazyCodeLoading": "requiredComponents",
   "pages": [
-    "pages/login/login",
     "pages/index/index",
     "pages/alert/alert",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/login/login"
   ],
   "subPackages": [
     {
@@ -12,8 +12,7 @@
       "name": "health",
       "pages": [
         "pages/health/health",
-        "pages/medication/medication",
-        "pages/trace/trace"
+        "pages/medication/medication"
       ]
     },
     {
@@ -46,6 +45,7 @@
     "selectedColor": "#4A90D9",
     "borderStyle": "white",
     "backgroundColor": "#ffffff",
+    "fontSize": "18px",
     "list": [
       {
         "pagePath": "pages/index/index",

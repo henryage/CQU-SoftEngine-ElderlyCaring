@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/users/users",
+    "pages/children/children",
+    "pages/audit/audit"
+  ],
+  "window": {
+    "backgroundColor": "#f5f7fa",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "基米管理",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1a73e8",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/users/users",
+        "text": "用户",
+        "iconPath": "images/tab-users.png",
+        "selectedIconPath": "images/tab-users-active.png"
+      },
+      {
+        "pagePath": "pages/children/children",
+        "text": "子女",
+        "iconPath": "images/tab-children.png",
+        "selectedIconPath": "images/tab-children-active.png"
+      },
+      {
+        "pagePath": "pages/audit/audit",
+        "text": "审计",
+        "iconPath": "images/tab-audit.png",
+        "selectedIconPath": "images/tab-audit-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

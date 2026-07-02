@@ -1,26 +1,75 @@
-<view class="container with-bottom-nav">
+<view class="container">
   <view class="page-header">
     <view class="page-header-title">用药提醒</view>
-    <view class="page-header-sub">查看老人的用药计划</view>
+    <view class="page-header-sub">为老人设置用药计划</view>
   </view>
 
-  <view class="card text-center">
-    <view class="text-sm text-gray mb-20">后端 child 路由开发中，功能即将上线</view>
+  <!-- 老人选择器 -->
+  <view class="card" wx:if="{{bindedUsers.length > 0}}">
+    <view class="text-sm text-gray mb-10">选择老人</view>
+    <picker mode="selector" range="{{bindedUsers}}" range-key="nickname" bindchange="onElderSelect">
+      <view class="elder-picker">
+        <text wx:if="{{selectedNickname}}">{{selectedNickname}} (ID: {{selectedUserId}})</text>
+        <text wx:else class="text-gray">请选择已绑定的老人</text>
+        <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+  <view class="card text-center" wx:elif="{{bindedUsers.length === 0}}">
+    <view class="text-sm text-gray">暂无绑定老人，请先到「绑定」页绑定</view>
   </view>
 
-  <!-- 底部导航 -->
-  <view class="bottom-nav">
-    <view class="bottom-nav-item" bindtap="goBack">
-      <view class="bottom-nav-icon">&#9750;</view>
-      <view>首页</view>
-    </view>
-    <view class="bottom-nav-item active">
-      <view class="bottom-nav-icon">&#9829;</view>
-      <view>用药</view>
-    </view>
-    <view class="bottom-nav-item" bindtap="goToTrace">
-      <view class="bottom-nav-icon">&#8982;</view>
-      <view>轨迹</view>
+  <!-- 添加按钮 -->
+  <view class="card" wx:if="{{selectedUserId}}">
+    <view class="btn-primary" bindtap="showAddForm">+ 新增用药提醒</view>
+  </view>
+
+  <!-- 提醒列表 -->
+  <view class="card" wx:if="{{selectedUserId && reminders.length > 0}}">
+    <view class="text-lg text-bold mb-20">用药计划</view>
+    <view class="med-item" wx:for="{{reminders}}" wx:key="reminder_id">
+      <view class="med-info">
+        <view class="text-md text-bold">{{item.drug_name}}</view>
+        <view class="text-sm text-gray">时间: {{item.remind_time}}  |  剂量: {{item.dosage || '未设置'}}</view>
+        <view class="text-sm" style="color:{{item.active === 1 ? '#07C160' : '#E6A23C'}}">
+          状态: {{item.active === 1 ? '启用' : '停用'}}
+        </view>
+      </view>
+      <view class="med-actions">
+        <text class="action-edit" data-id="{{item.reminder_id}}" bindtap="showEditForm">编辑</text>
+        <text class="action-del" data-id="{{item.reminder_id}}" data-drug="{{item.drug_name}}" bindtap="doDelete">删除</text>
+      </view>
     </view>
   </view>
+  <view class="card text-center" wx:elif="{{selectedUserId && reminders.length === 0 && !loading}}">
+    <view class="text-sm text-gray">暂无用药提醒，点击上方按钮新增</view>
+  </view>
+
+  <!-- 新增/编辑弹窗 -->
+  <view class="modal-mask" wx:if="{{showForm}}" bindtap="hideForm"></view>
+  <view class="modal-card" wx:if="{{showForm}}">
+    <view class="text-lg text-bold mb-20">{{editId ? '编辑提醒' : '新增提醒'}}</view>
+    <view class="input-row mb-20">
+      <view class="text-sm text-gray mb-10">药品名称 *</view>
+      <input class="bind-input" placeholder="如：阿司匹林" value="{{formDrugName}}" bindinput="onDrugNameInput" />
+    </view>
+    <view class="input-row mb-20">
+      <view class="text-sm text-gray mb-10">提醒时间 *</view>
+      <input class="bind-input" placeholder="HH:MM 如 08:00" value="{{formRemindTime}}" bindinput="onRemindTimeInput" />
+    </view>
+    <view class="input-row mb-20">
+      <view class="text-sm text-gray mb-10">每次剂量</view>
+      <input class="bind-input" placeholder="如：一次一片" value="{{formDosage}}" bindinput="onDosageInput" />
+    </view>
+    <view wx:if="{{editId}}" class="mb-20" style="display:flex;align-items:center;gap:16rpx;">
+      <view class="text-sm text-gray">启用状态</view>
+      <switch checked="{{formActive === 1}}" bindchange="onActiveToggle" />
+      <text class="text-sm text-gray">{{formActive === 1 ? '启用' : '停用'}}</text>
+    </view>
+    <view class="form-btns">
+      <view class="btn-secondary" bindtap="hideForm">取消</view>
+      <view class="btn-primary" bindtap="doSave">保存</view>
+    </view>
+  </view>
+
 </view>

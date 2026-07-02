@@ -108,7 +108,7 @@ async def wx_login(payload: WxLoginIn, db: DB):
             nickname = u.nickname
             ref_id = u.user_id
         else:
-            ch = ChildUser(name=f"子女{acc.account_id}", phone=f"dev_{openid}", wx_account_id=acc.account_id)
+            ch = ChildUser(name=f"子女{acc.account_id}", phone=f"wx_{acc.account_id}", wx_account_id=acc.account_id)
             db.add(ch)
             await db.flush()
             acc.ref_user_id = ch.child_id

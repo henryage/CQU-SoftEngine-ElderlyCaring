@@ -1,0 +1,21 @@
+<view class="page-container">
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <view class="nav-back" bindtap="onGoBack">‹ 返回</view>
+      <view class="nav-title">用药提醒</view>
+      <view class="nav-placeholder"></view>
+    </view>
+  </view>
+
+  <scroll-view class="reminder-list" scroll-y enhanced show-scrollbar="{{false}}">
+    <view wx:if="{{loading}}" class="loading-text">加载中...</view>
+    <view wx:if="{{!loading && reminderList.length === 0}}" class="empty-text">暂无用药提醒</view>
+    <view wx:for="{{reminderList}}" wx:key="reminder_id" class="reminder-item">
+      <view class="reminder-icon">💊</view>
+      <view class="reminder-info">
+        <view class="reminder-drug">{{item.drug_name}}</view>
+        <view class="reminder-meta">{{item.dosage}} · {{item.remind_time}}</view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

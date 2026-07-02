@@ -1,26 +1,59 @@
-<view class="container with-bottom-nav">
+<view class="container">
   <view class="page-header">
     <view class="page-header-title">定时问候</view>
     <view class="page-header-sub">给老人设置定期问候</view>
   </view>
 
-  <view class="card text-center">
-    <view class="text-sm text-gray mb-20">后端 child 路由开发中，功能即将上线</view>
+  <!-- 老人选择器 -->
+  <view class="card" wx:if="{{bindedUsers.length > 0}}">
+    <view class="text-sm text-gray mb-10">选择老人</view>
+    <picker mode="selector" range="{{bindedUsers}}" range-key="nickname" bindchange="onElderSelect">
+      <view class="elder-picker">
+        <text wx:if="{{selectedNickname}}">{{selectedNickname}} (ID: {{selectedUserId}})</text>
+        <text wx:else class="text-gray">请选择已绑定的老人</text>
+        <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+  <view class="card text-center" wx:elif="{{bindedUsers.length === 0}}">
+    <view class="text-sm text-gray">暂无绑定老人，请先到「绑定」页绑定</view>
   </view>
 
-  <!-- 底部导航 -->
-  <view class="bottom-nav">
-    <view class="bottom-nav-item" bindtap="goBack">
-      <view class="bottom-nav-icon">&#9750;</view>
-      <view>首页</view>
+  <!-- 已设置问候 -->
+  <view class="card" wx:if="{{selectedUserId}}">
+    <view class="text-lg text-bold mb-20">已设置的问候</view>
+    <view wx:if="{{greetings.length > 0}}">
+      <view wx:for="{{greetings}}" wx:key="greeting_id" class="med-item" style="border-bottom:1rpx solid #f0f0f0;padding:16rpx 0;">
+        <view class="flex-between mb-8">
+          <view class="text-sm" style="font-weight:bold;">{{item.content}}</view>
+          <view bindtap="doEditGreeting" data-id="{{item.greeting_id}}" data-content="{{item.content}}" data-cron="{{item.cron_expr}}"
+            class="btn-secondary" style="padding:4rpx 16rpx;font-size:20rpx;">修改</view>
+        </view>
+        <view class="text-sm text-gray" style="font-size:20rpx;">定时: {{item.cron_expr}}</view>
+      </view>
     </view>
-    <view class="bottom-nav-item" bindtap="goToMessage">
-      <view class="bottom-nav-icon">&#9993;</view>
-      <view>通信</view>
+    <view wx:else class="text-sm text-gray text-center">暂无定时问候</view>
+  </view>
+
+  <!-- 新增/编辑问候 -->
+  <view class="card" wx:if="{{selectedUserId}}">
+    <view class="text-lg text-bold mb-20">{{editGreetingId ? '修改问候' : '新增问候'}}</view>
+    <view class="input-row mb-16">
+      <view class="text-sm text-gray mb-8">问候语</view>
+      <input class="bind-input" placeholder="如：早上好，今天天气不错" value="{{greetingContent}}" bindinput="onGreetingInput" maxlength="100" />
     </view>
-    <view class="bottom-nav-item active">
-      <view class="bottom-nav-icon">&#9728;</view>
-      <view>问候</view>
+    <view class="input-row mb-20">
+      <view class="text-sm text-gray mb-8">Cron 表达式</view>
+      <input class="bind-input" placeholder="如：0 8 * * *（每天早8点）" value="{{cronExpr}}" bindinput="onCronInput" />
+    </view>
+    <view class="text-xs text-gray mb-20" style="line-height:1.6;">
+      格式：分 时 日 月 周<br />
+      示例：0 8 * * *（每天8点） · 0 12 * * 1-5（工作日12点） · 30 18 * * *（每天18:30）
+    </view>
+    <view class="flex">
+      <view wx:if="{{editGreetingId}}" class="btn-secondary" style="margin-right:16rpx;flex:1;text-align:center;" bindtap="cancelEdit">取消编辑</view>
+      <view class="btn-primary" style="flex:1;text-align:center;" bindtap="doSaveGreeting" disabled="{{saving}}">{{saving ? '保存中...' : '保存'}}</view>
     </view>
   </view>
+
 </view>

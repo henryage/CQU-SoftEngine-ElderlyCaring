@@ -1,0 +1,36 @@
+<!-- admin-miniprogram/pages/audit/audit.wxml -->
+<view class="filter-row">
+  <view class="filter-btn" bindtap="onFilterOperation">
+    {{operation || '全部'}} <text class="arrow">▼</text>
+  </view>
+  <view class="filter-btn" bindtap="onFilterOperator">
+    {{operatorType || '全部'}} <text class="arrow">▼</text>
+  </view>
+</view>
+
+<block wx:if="{{auditList.length > 0}}">
+  <view class="audit-item" wx:for="{{auditList}}" wx:key="id">
+    <view class="time">{{item.created_at}}</view>
+    <view class="action">{{item.operation}}</view>
+    <view class="operator">操作者：{{item.operator_name || item.operator_type || '未知'}}</view>
+  </view>
+</block>
+
+<block wx:else>
+  <view class="empty-state">
+    <view class="icon">📋</view>
+    <view class="text">暂无审计记录</view>
+  </view>
+</block>
+
+<view wx:if="{{hasMore && auditList.length > 0}}" style="text-align:center;padding:20rpx;color:#999;font-size:24rpx;">
+  上拉加载更多
+</view>
+
+<view style="padding: 24rpx;">
+  <view class="btn-primary" bindtap="handleExport" style="margin: 0;">
+    {{exporting ? '导出中...' : '导出 CSV'}}
+  </view>
+</view>
+
+<view class="safe-bottom"></view>

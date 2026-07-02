@@ -22,10 +22,7 @@
         <view class="func-icon icon-med">药</view>
         <view class="func-label">用药提醒</view>
       </view>
-      <view class="func-item" bindtap="goToTrace">
-        <view class="func-icon icon-trace">迹</view>
-        <view class="func-label">行为轨迹</view>
-      </view>
+
       <view class="func-item" bindtap="goToHistory">
         <view class="func-icon icon-history">答</view>
         <view class="func-label">问答记录</view>

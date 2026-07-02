@@ -3,10 +3,7 @@
 
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
     <view class="nav-content">
-      <view class="nav-center">
-        <view class="nav-title">喵喵助手</view>
-        <view class="nav-user-id">{{userId}}</view>
-      </view>
+      <view class="nav-title">喵喵助手</view>
     </view>
   </view>
 
