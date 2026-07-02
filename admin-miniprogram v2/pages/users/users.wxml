@@ -18,7 +18,7 @@
 <view class="section-title">全部用户</view>
 
 <block wx:if="{{userList.length > 0}}">
-  <view class="user-card" wx:for="{{userList}}" wx:key="user_id">
+  <view class="user-card" wx:for="{{userList}}" wx:key="user_id" bindtap="onUserTap" data-user="{{item}}">
     <view class="avatar" style="background: {{item.avatarColor}};">{{item.initial}}</view>
     <view class="info">
       <view class="name-row">
@@ -47,3 +47,27 @@
 </view>
 
 <view class="safe-bottom"></view>
+
+<!-- 绑定子女 Modal -->
+<view class="modal-overlay" wx:if="{{showUserModal}}" bindtap="closeUserModal"></view>
+<view class="modal-content" wx:if="{{showUserModal}}">
+  <view class="modal-header">
+    <text class="modal-title">👤 {{modalUser.nickname}} 的绑定子女</text>
+    <text class="modal-close" bindtap="closeUserModal">✕</text>
+  </view>
+  <view class="modal-body">
+    <view class="modal-loading" wx:if="{{modalLoading}}">加载中...</view>
+    <block wx:else>
+      <view class="modal-empty" wx:if="{{modalChildren.length === 0}}">暂未绑定子女</view>
+      <block wx:for="{{modalChildren}}" wx:key="child_id">
+        <view class="modal-list-item">
+          <view class="modal-avatar" style="background: {{item.avatarColor}};">{{item.initial}}</view>
+          <view class="modal-info">
+            <view class="modal-name">{{item.name}}</view>
+            <view class="modal-detail">关系：{{item.relation}} · {{item.phoneMasked || item.phone}}</view>
+          </view>
+        </view>
+      </block>
+    </block>
+  </view>
+</view>

@@ -10,7 +10,11 @@ Page({
     page: 1,
     pageSize: 20,
     hasMore: true,
-    loading: false
+    loading: false,
+    showUserModal: false,
+    modalUser: null,
+    modalChildren: [],
+    modalLoading: false
   },
 
   onLoad: function () {
@@ -95,6 +99,46 @@ Page({
     }).then(function (res) {
       that.setData({ childrenTotal: res.total || 0 });
     }).catch(function () {});
+  },
+
+  // 点击老人卡片 → 查看绑定子女
+  onUserTap: function (e) {
+    var user = e.currentTarget.dataset.user;
+    if (!user) return;
+    this.setData({
+      showUserModal: true,
+      modalUser: user,
+      modalChildren: [],
+      modalLoading: true
+    });
+
+    var that = this;
+    request({
+      url: '/api/v1/admin/relations',
+      method: 'GET',
+      data: { user_id: user.user_id }
+    }).then(function (res) {
+      var items = res.items || [];
+      var list = items.map(function (item) {
+        var child = item.child || {};
+        return {
+          child_id: child.child_id,
+          name: child.name || '未命名',
+          phone: child.phone || '',
+          phoneMasked: maskPhone(child.phone),
+          relation: item.relation || '未知',
+          initial: (child.name || '?').charAt(0),
+          avatarColor: getChildAvatarColor(child.child_id)
+        };
+      });
+      that.setData({ modalChildren: list, modalLoading: false });
+    }).catch(function () {
+      that.setData({ modalLoading: false });
+    });
+  },
+
+  closeUserModal: function () {
+    this.setData({ showUserModal: false, modalUser: null, modalChildren: [] });
   }
 });
 
@@ -127,4 +171,10 @@ var AVATAR_COLORS = ['#1a73e8', '#34a853', '#ea4335', '#f9ab00', '#7c5cfc', '#00
 function getAvatarColor(id) {
   var idx = (id || 0) % AVATAR_COLORS.length;
   return AVATAR_COLORS[idx];
+}
+
+var CHILD_AVATAR_COLORS = ['#f472b6', '#c084fc', '#fb923c', '#a78bfa', '#f9ab00', '#00d4aa'];
+function getChildAvatarColor(id) {
+  var idx = (id || 0) % CHILD_AVATAR_COLORS.length;
+  return CHILD_AVATAR_COLORS[idx];
 }

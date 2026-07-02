@@ -1,4 +1,5 @@
 var config = require('../config/index.js');
+var storage = require('./storage.js');
 var BASE_URL = config.baseUrl;
 
 function getToken() {
@@ -33,7 +34,20 @@ function request(options) {
       success: function(res) {
         wx.hideNavigationBarLoading();
         if (res.statusCode === 401) {
-          wx.showToast({ title: '登录已过期，请重新进入', icon: 'none', duration: 3000 });
+          // token 过期或无效，清除并跳转登录页
+          storage.remove('token');
+          storage.remove('refId');
+          storage.remove('nickname');
+          var app = getApp();
+          if (app && app.globalData) {
+            app.globalData.token = '';
+            app.globalData.refId = null;
+            app.globalData.nickname = '';
+          }
+          wx.showToast({ title: '登录已过期，请重新登录', icon: 'none', duration: 2000 });
+          setTimeout(function () {
+            wx.reLaunch({ url: '/pages/login/login' });
+          }, 1500);
           reject(new Error('Unauthorized'));
           return;
         }
